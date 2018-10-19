@@ -1,0 +1,16 @@
+<nav id="sidebar" class="sidebar-wrapper">
+  <div class="sidebar-header">
+    <h3>Bootstrap Sidebar</h3>
+  </div>
+
+  <div class="nav-side-menu mt-2">
+    <ul class="nav">
+      <li *ngFor="let link of links" class="nav-item"  [class.active]="link === selectedLink" (click)="onSelect(link)">
+        <a class="nav-link" routerLink="{{link.route}}">
+          <i class="{{link.icon}}" aria-hidden="true"> </i>
+          <span>{{link.text}}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

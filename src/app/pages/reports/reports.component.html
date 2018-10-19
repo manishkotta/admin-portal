@@ -1,0 +1,62 @@
+<!-- <div class="row">
+  <div class="col-2 grey-card">
+    <div class="nav-side-menu mt-2">
+      <ul class="nav">
+        <li *ngFor="let link of links" class="nav-item" [class.active]="link === selectedLink">
+          <a class="nav-link" routerLink="" [attr.data-collapse]="link.nestedRoutes && link.nestedRoutes.length > 0" [class.dropdown-toggle]="link.nestedRoutes">
+            <i class="{{link.icon}}" aria-hidden="true"> </i>
+            <span>{{link.text}}</span>
+          </a>
+          <ul *ngIf="link.nestedRoutes" class="dropdown-items" id="{{link.route}}">
+            <li *ngFor="let nestedLink of link.nestedRoutes" clas="nav-item">
+              <a class="nav-link" routerLink="{{nestedLink.route}}">
+                <span>{{nestedLink.text}}</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-10">
+
+  </div>
+</div> -->
+
+<div class="report-wrapper">
+  <div class="row">
+    <div class="col-2 bg-C0C3C5 report-side-bar-wrapper">
+      <div class="report-by">
+        <span>Report by</span>
+      </div>
+      <div class="nav-side-menu">
+        <ul class="nav report-sidebar">
+          <li class="nav-item">
+            <a id="dropdownBasic1" (click)="isCollapsed = !isCollapsed" data-toggle="true" [attr.aria-expanded]="!isCollapsed">Devotee</a>
+            <ul aria-labelledby="dropdownBasic1" [ngbCollapse]="isCollapsed">
+              <li class="">
+                <a routerLink="darshan-report">Darshan Report</a>
+              </li>
+              <li class="">
+                <a routerLink="online-walkin-report">Time slot Report </a>
+              </li>
+              <li class="">
+                <a routerLink="live-in-out"> Live Devotee in/out</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a>Counter Report</a>
+          </li>
+          <li class="nav-item">
+            <a>Access Card Report</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="col-10 card">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

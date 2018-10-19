@@ -1,1 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~font-awesome/css/font-awesome.css";
+
+body{
+    background-color: #E3E7EB !important;
+    font-family: 'Open Sans';
+}
+
+::-webkit-input-placeholder {
+    font-size: 13px!important;
+ }
+ 
+ :-moz-placeholder { /* Firefox 18- */
+       font-size: 13px!important;
+ }
+ ::-moz-placeholder {  /* Firefox 19+ */
+       font-size: 13px!important;
+ }
+
+ body .ui-table .ui-table-thead > tr > th {
+      border:none;
+      border-bottom: 1px solid #c8c8c8;
+      background-color:#D2D9DF;
+  }
+
+  body .ui-table .ui-table-tbody > tr > td {
+      border:none;
+      border-bottom: 1px solid #c8c8c8;
+      font-weight: bold;
+  }
+
+  body .send-sms-group-wrapper .ui-dialog .ui-dialog-content{
+    padding: 0!important;
+  }
+
+  .send-sms-group-wrapper .ui-dialog .ui-dialog-content{
+    padding: 0!important;
+  }
+
+  .display-flex{
+    display: flex;
+    justify-content: space-between;
+  }

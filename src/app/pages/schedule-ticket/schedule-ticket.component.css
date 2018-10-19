@@ -1,0 +1,75 @@
+.schedule-wrapper{
+    padding: 25px;
+    background-color: white;
+    margin: 2%
+}
+.grey-card{
+    background-color: #EAEAEA;
+    padding: 5% 10%;
+   }
+.schedule-nav-bar {
+  
+}
+
+.font-red{
+color:#D0021B;
+}
+
+.slot-block-1{
+    padding:12% 18%;
+    border:1px solid #EAEAEA;
+    background-color: white;
+    color:#608735;
+    font-size:13px;
+    font-weight:500;
+}
+.slot-block-2{
+    padding:10% 24%;
+    border:1px solid #EAEAEA;
+    background-color: white;
+    font-weight:600;    
+}
+
+.slot-block-3{
+    padding:5% 24%;
+    background-color: #DDDDDD;
+    border:1px solid #EAEAEA;
+}
+
+.slot-block-heading-1{
+    padding:7% 24%;
+    border:1px solid #EAEAEA;
+    background-color: #DDDDDD ;
+}
+.slot-block-heading-2{
+    padding:7% 24%;
+    border:1px solid #EAEAEA;
+    background-color: #DDDDDD;
+}
+.slot-block-heading-3{
+    padding:5% 22%;
+    font-size:12px;
+}
+.schedule-wrapper span.imp{
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.schedule-nav-bar .nav-item .active{
+    background-color: #417505;
+    border : 1px solid black;
+}
+
+.schedule-nav-bar li {
+    cursor: pointer;
+}
+
+.schedule-nav-bar li:hover {
+    cursor: pointer;
+    background-color: #417505;
+    border : 1px solid black;
+}
+
+.schedule-nav-wrapper{
+    border-bottom:3px solid black;
+}

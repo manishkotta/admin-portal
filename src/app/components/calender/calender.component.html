@@ -1,0 +1,25 @@
+<div class="card calendar-wrapper">
+  <div class="calendar-month">
+     <span>{{date | date :'MMM y'}}</span>
+  </div>
+   <table class="table table-bordered">
+     <tr class="calendar-heading mb-2">
+       <td>SUN</td>
+       <td>MON</td>
+       <td>TUE</td>
+       <td>WED</td>
+       <td>THU</td>
+       <td>FRI</td>
+       <td>SAT</td>
+     </tr>
+     <tr class="calender-content" *ngFor="let week of weeks">
+        <td *ngFor="let day of week" [class.bg-green]="day">
+          <div class="block" *ngIf="day">
+           <span>
+             {{day | date : 'd'}}
+           </span>
+          </div>
+        </td>
+     </tr>
+   </table>
+</div>

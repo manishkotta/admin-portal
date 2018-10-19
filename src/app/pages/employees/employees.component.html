@@ -1,0 +1,329 @@
+<div class="emp-wrapper">
+    <p-toast></p-toast>
+  <div class="row mb-2">
+    <div class="col-6">
+      <p>Total Employees</p>
+    </div>
+    <div class="col-6">
+      <div class="form-row">
+        <div class="col-7">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="fa fa-search input-group-text"></span>
+            </div>
+            <input placeholder="Search by name,id,role,mobile" class="form-control" />
+          </div>
+        </div>
+        <div class="col-2">
+          <button type="button" class="btn btn-sm btn-emp" (click)="showSendSMSDialog()">Send SMS</button>
+        </div>
+        <div class="col-3">
+          <button type="button" class="btn btn-sm btn-emp" (click)="showDialogAdd()">Add Employee</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p-table [value]="employees" [(selection)]="selectedEmployees" [columns]="cols">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="width: 3em">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th style="width: 5em"></th>
+          <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+            {{col.header}}
+            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+          </th>
+          <th>PASSWORD</th>
+          <th style="width: 5em"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-emp>
+        <tr [pSelectableRow]="emp">
+          <td>
+            <p-tableCheckbox [value]="emp"></p-tableCheckbox>
+          </td>
+          <td>
+            <img class="profile-image" src="{{emp.profileImage}}" />
+          </td>
+          <td>{{emp.name}}</td>
+          <td>{{emp.role}}</td>
+          <td>{{emp.empId}}</td>
+          <td>{{emp.contact}}</td>
+          <td>{{emp.gender}}</td>
+          <td class="crud-cols">
+            <div class="row no-gutters">
+              <div class="col-6">
+                <i class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i>
+              </div>
+              <div class="col-6" (click)="showActivatePasswordDialog(emp)">
+                <i class="fa fa-key fa-lg" aria-hidden="true"></i>
+              </div>
+            </div>
+
+
+          </td>
+          <td class="crud-cols">
+            <div (click)="showDialogEdit(emp)">
+              <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+            </div>
+
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <!-- Add Edit Template  -->
+    <p-dialog [(visible)]="display" [width]="800">
+      <p-header>
+        <span>{{addEditEmployeeHeader}}</span>
+      </p-header>
+      <form name="form" (ngSubmit)="f.form.valid && addEmployee()" #f="ngForm" novalidate class="form-inline">
+        <div class="form-row add-emp-wrapper">
+          <div clas="col-6">
+            <div>
+              <h6>Personal Details</h6>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="photo">Photo</label>
+              </div>
+              <div class="col-8">
+                <p-fileUpload mode="basic" chooseLabel="Browse" accept="image/*" maxFileSize="1000000" (onUpload)="onPhotoUpload($event)"></p-fileUpload>
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="name">Name</label>
+              </div>
+              <div class="col-6">
+                <input type="text" [(ngModel)]="employee.name" class="form-control" id="name" name="name" #name [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required>
+                <div *ngIf="f.submitted && name.invalid" class="invalid-feedback">
+                    <div *ngIf="name.errors.required">Name is required</div>
+                </div>
+              </div>
+              
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="gender">Gender</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.gender" class="form-control" id="gender" name="gender">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="dob">DOB</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.dateOfBirth" class="form-control" id="dob" name="dob">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="addone">Address Line1</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.addressLine1" class="form-control" id="addone" name="addone ">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="addtwo">Address Line2</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.addressLine2" class="form-control" id="addtwo" name="addtwo">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="addone">City</label>
+              </div>
+              <div class="col-6">
+                  <p-dropdown [options]="cities" [(ngModel)]="employee.city" name="city"></p-dropdown>
+                
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="state">State</label>
+              </div>
+              <div class="col-8">
+                  <p-dropdown [options]="states" [(ngModel)]="employee.state" name="state"></p-dropdown>
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="pincode">Pin code</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.pincode" class="form-control" id="pincode" name="pincode">
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div>
+              <h6>Employee Details</h6>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="education">Education</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.education" class="form-control" id="education" name="education">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="role">Designation/Role</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.designation" class="form-control" id="role" name="role">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="department">Department</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.department" class="form-control" id="department" name="department">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="workloc">Work Location</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.workLocation" class="form-control" id="workloc" name="workloc">
+              </div>
+            </div>
+            <div class="mb-2">
+              <h6>Contact & ID Details</h6>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="email">Email ID</label>
+              </div>
+              <div class="col-8">
+                <input type="email" [(ngModel)]="employee.email" class="form-control" id="email" name="email">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="mobile">Mobile</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.mobile" class="form-control" id="mobile" name="mobile">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="idproof">ID Proof</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.idProof" class="form-control" id="idproof" name="idproof">
+              </div>
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="addressproff">Address Proof</label>
+              </div>
+              <div class="col-8">
+                <input type="text" [(ngModel)]="employee.addressProof" class="form-control" id="addressproof" name="addressproof">
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <p-footer>
+        <div class="row no-gutters">
+          <div class="offset-4 col-2">
+            <button type="submit" class="btn btn-sm btn-emp">Add</button>
+          </div>
+          <div class="col-2 cancle-emp-btn">
+            <a (click)="closeEmpDialog()">Cancel</a>
+          </div>
+        </div>
+      </p-footer>
+    </p-dialog>
+    <!-- Send Temp Password  -->
+    <p-dialog [(visible)]="activatePasswordDisplay" [width]="500">
+      <p-header>
+        Send temporary password to
+      </p-header>
+      <div class="form-row mt-4 mb-4">
+        <div class="col-5">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
+            <label class="custom-control-label font-weight-bold" for="customRadioInline1">Mobile Number</label>
+          </div>
+          <div class="ml-4">
+            <span></span>
+          </div>
+        </div>
+        <div class="col-7">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
+            <label class="custom-control-label font-weight-bold" for="customRadioInline2">Email Address</label>
+          </div>
+          <div class="ml-4">
+            <span></span>
+          </div>
+        </div>
+      </div>
+
+      <p-footer>
+        <div class="row no-gutters">
+          <div class="offset-4 col-2">
+            <button type="button" class="btn btn-sm btn-emp" (click)="sendTemporaryPassword()">Send</button>
+          </div>
+          <div class="col-2 cancle-emp-btn">
+            <a (click)="closeActivatePassDialog()">Cancel</a>
+          </div>
+        </div>
+      </p-footer>
+    </p-dialog>
+    <!-- Send SMS  -->
+    <div class="send-sms-group-wrapper">
+    <p-dialog [(visible)]="sendSMSDisplay" [width]="600">
+      <p-header>
+        Send Group Announcement
+      </p-header>
+      <div class="row no-gutters">
+        <div class="col-4 recipient-wrapper">
+          <div class="recipient-heading">
+            <span>Recipient</span>
+          </div>
+          <div class="recipient-content">
+              <p-multiSelect [options]="employeeGroup" [(ngModel)]="selectedEmpGroupToSendSMS"></p-multiSelect>
+          </div>
+        </div>
+        <div class="col-8 sms-template-wrapper">
+          <div class="sms-template">
+            <label class="mr-4">SMS Template</label>
+            <p-dropdown [options]="smsTemplates" [(ngModel)]="selectedSmsTemplate"></p-dropdown>
+          </div>
+          <div class="sms-write-message">
+              <label class="mb-4">Write your message</label>
+              <div>
+                <textarea [rows]="10" [cols]="40" pInputTextarea> </textarea>
+              </div>
+          </div>
+
+        </div>
+      </div>
+      <p-footer>
+        <div class="row no-gutters">
+          <div class="offset-4 col-2">
+            <button type="button" class="btn btn-sm btn-emp" (click)="sendGroupSMS()">Send SMS</button>
+          </div>
+          <div class="col-2 cancle-emp-btn">
+            <a (click)="closeSendSMSGropuDailog()">Cancel</a>
+          </div>
+        </div>
+      </p-footer>
+    </p-dialog>
+  </div>
+  </div>
+</div>

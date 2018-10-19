@@ -1,0 +1,40 @@
+#sidebar {
+    min-height: 100vh;
+    background-color: #4B4B4B;
+}
+
+.sidebar-header{
+    background-color: #E88F28;
+    height: 150px;
+}
+  
+.nav-side-menu ul, .nav-side-menu li {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    width:100%;
+    line-height: 20px;
+    cursor: pointer;
+}
+.nav-side-menu li{
+    margin-bottom: 1px;
+}
+.nav-side-menu li a i{
+    width:25px;
+    color:white;
+}
+.nav-side-menu li a span{
+    color:white;
+    font-size: 13px;
+}
+.nav-side-menu ul .active, .nav-side-menu li .active {
+    background-color: #1b0f0f;
+}
+
+.nav-side-menu li:hover {
+    background-color: #292929;
+    
+}
+.nav-side-menu li a i:hover{
+    
+}

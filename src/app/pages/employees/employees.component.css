@@ -1,0 +1,105 @@
+.emp-wrapper{
+    padding: 50px;
+}
+.profile-image{
+    height:50px;
+    width: 50px;
+    border-radius: 50%;
+}
+.btn-emp{
+    font-size:12px;
+    border:1px solid #ADA5A5;
+    background-color: #FF963C;
+}
+.form-row{
+    align-items: center;
+}
+
+.add-emp-wrapper label{
+    font-size:13px;
+    font-weight: 500;
+}
+
+.add-emp-wrapper{
+    width:800px;
+}
+
+.add-emp-wrapper h6{
+    font-weight: bold;
+}
+
+.row a{
+    cursor: pointer;
+}
+
+.crud-cols{
+  cursor: pointer;
+}
+
+.cancle-emp-btn{
+    text-align: justify;
+}
+
+.cancle-emp-btn a{
+    vertical-align: sub;
+    text-decoration: underline;
+}
+
+.custom-control {
+    position: relative;
+    display: block;
+    min-height: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+.custom-control-inline {
+    display: inline-flex;
+    margin-right: 1rem;
+}
+
+.custom-control-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+.custom-control-label {
+    margin-bottom: 0;
+}
+
+.recipient-heading{
+    padding: 20px 20px;
+    font-weight: bold;
+    border-bottom:1px solid grey;
+}
+
+.recipient-content{
+    padding: 20px 20px;
+    border-right: 1px solid grey;
+    height: 84%;
+    margin-right: 10px;
+}
+
+.recipient-wrapper{
+   border-right:1px solid grey;
+}
+
+.sms-template{
+    padding:20px 20px;
+}
+
+.sms-write-message{
+    padding:20px 20px;
+}
+
+.sms-template-wrapper{
+    background-color: #E8E8E8;
+}
+
+
+
+.sms-template-wrapper label{
+    font-size:13px;
+    font-weight: bold;
+
+}

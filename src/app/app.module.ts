@@ -9,7 +9,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule  } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http'; 
 
 /* PrimeNg Imports */
 import { TableModule } from 'primeng/table';
@@ -21,10 +22,12 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { TabViewModule } from 'primeng/tabview';
+import {CalendarModule} from 'primeng/calendar';
 import { ScheduleHoursComponent } from './components/schedule-hours/schedule-hours.component';
 import { CalenderComponent } from './components/calender/calender.component';
 
 import { TitleService } from './services/title.service';
+import { EmployeeService } from './services/employee.service';
 import { Title } from '@angular/platform-browser';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { DarshanReportComponent } from './components/darshan-report/darshan-report.component';
@@ -77,9 +80,12 @@ const APP_TITLE = 'KASHI!';
     InputTextareaModule,
     MultiSelectModule,
     FileUploadModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule,
+    CalendarModule,
+    ReactiveFormsModule
   ],
-  providers: [TitleService],
+  providers: [TitleService,EmployeeService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

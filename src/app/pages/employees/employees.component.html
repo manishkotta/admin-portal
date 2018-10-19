@@ -2,7 +2,7 @@
     <p-toast></p-toast>
   <div class="row mb-2">
     <div class="col-6">
-      <p>Total Employees</p>
+      <p>Total {{employeeCount}} Employee/s</p>
     </div>
     <div class="col-6">
       <div class="form-row">
@@ -11,7 +11,7 @@
             <div class="input-group-prepend">
               <span class="fa fa-search input-group-text"></span>
             </div>
-            <input placeholder="Search by name,id,role,mobile" class="form-control" />
+            <input placeholder="Search by name,id,role,mobile" class="form-control" (input)="dt.filterGlobal($event.target.value, 'contains')"  />
           </div>
         </div>
         <div class="col-2">
@@ -24,7 +24,7 @@
     </div>
   </div>
   <div>
-    <p-table [value]="employees" [(selection)]="selectedEmployees" [columns]="cols">
+    <p-table #dt [value]="employees" [(selection)]="selectedEmployees" [columns]="cols">
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th style="width: 3em">
@@ -45,24 +45,22 @@
             <p-tableCheckbox [value]="emp"></p-tableCheckbox>
           </td>
           <td>
-            <img class="profile-image" src="{{emp.profileImage}}" />
+            <img class="profile-image" src="{{emp.imageUrl}}" />
           </td>
-          <td>{{emp.name}}</td>
-          <td>{{emp.role}}</td>
-          <td>{{emp.empId}}</td>
-          <td>{{emp.contact}}</td>
-          <td>{{emp.gender}}</td>
+          <td>{{emp.fname}} {{emp.lname}}</td>
+          <td>Counter Staff</td>
+          <td>{{emp.employeeId}}</td>
+          <td>{{emp.phone}}</td>
+          <td>{{emp.gender === 0 ? "M" : emp.gender === 1 ? "F" : ""}}</td>
           <td class="crud-cols">
             <div class="row no-gutters">
-              <div class="col-6">
-                <i class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i>
+              <div class="col-2 no-password" >
+                <i *ngIf="emp.changePassword" class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i>
               </div>
               <div class="col-6" (click)="showActivatePasswordDialog(emp)">
                 <i class="fa fa-key fa-lg" aria-hidden="true"></i>
               </div>
             </div>
-
-
           </td>
           <td class="crud-cols">
             <div (click)="showDialogEdit(emp)">
@@ -78,7 +76,7 @@
       <p-header>
         <span>{{addEditEmployeeHeader}}</span>
       </p-header>
-      <form name="form" (ngSubmit)="f.form.valid && addEmployee()" #f="ngForm" novalidate class="form-inline">
+      <form [formGroup]="registerForm" (ngSubmit)="addEmployee()" class="form-inline">
         <div class="form-row add-emp-wrapper">
           <div clas="col-6">
             <div>
@@ -94,12 +92,12 @@
             </div>
             <div class="form-group mb-2">
               <div class="col-4">
-                <label for="name">Name</label>
+                <label for="fname">Name</label>
               </div>
               <div class="col-6">
-                <input type="text" [(ngModel)]="employee.name" class="form-control" id="name" name="name" #name [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required>
-                <div *ngIf="f.submitted && name.invalid" class="invalid-feedback">
-                    <div *ngIf="name.errors.required">Name is required</div>
+                <input type="text" formControlName="firstName" class="form-control" id="name" name="fname"  [ngClass]="{'is-invalid': submitted && f.firstName.invalid }" required>
+                <div *ngIf="submitted && f.firstName.invalid" class="invalid-feedback">
+                    <div *ngIf="f.firstName.errors.required">Name is required</div>
                 </div>
               </div>
               
@@ -109,7 +107,7 @@
                 <label for="gender">Gender</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.gender" class="form-control" id="gender" name="gender">
+                <p-dropdown [options]="genderGrp" [(ngModel)]="employee.gender" name="gender" [autoWidth]="false" styleClass="full-width" [ngModelOptions]="{standalone: true}" ></p-dropdown>
               </div>
             </div>
             <div class="form-group mb-2">
@@ -117,7 +115,7 @@
                 <label for="dob">DOB</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.dateOfBirth" class="form-control" id="dob" name="dob">
+                <p-calendar [(ngModel)]="employee.dob" dateFormat="dd/mm/yy" name="dob" styleClass="display-grid" [ngModelOptions]="{standalone: true}"></p-calendar>
               </div>
             </div>
             <div class="form-group mb-2">
@@ -140,8 +138,8 @@
               <div class="col-4">
                 <label for="addone">City</label>
               </div>
-              <div class="col-6">
-                  <p-dropdown [options]="cities" [(ngModel)]="employee.city" name="city"></p-dropdown>
+              <div class="col-8">
+                  <p-dropdown [options]="cities" [(ngModel)]="employee.city" name="city" [autoWidth]="false" styleClass="full-width" [ngModelOptions]="{standalone: true}"></p-dropdown>
                 
               </div>
             </div>
@@ -150,7 +148,7 @@
                 <label for="state">State</label>
               </div>
               <div class="col-8">
-                  <p-dropdown [options]="states" [(ngModel)]="employee.state" name="state"></p-dropdown>
+                  <p-dropdown [options]="states" [(ngModel)]="employee.state" name="state" [autoWidth]="false" styleClass="full-width" [ngModelOptions]="{standalone: true}"></p-dropdown>
               </div>
             </div>
             <div class="form-group mb-2">
@@ -214,7 +212,7 @@
                 <label for="mobile">Mobile</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.mobile" class="form-control" id="mobile" name="mobile">
+                <input type="text" [(ngModel)]="employee.phone" class="form-control" id="mobile" name="mobile">
               </div>
             </div>
             <div class="form-group mb-2">

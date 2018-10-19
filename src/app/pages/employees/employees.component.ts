@@ -1,11 +1,14 @@
-import { Component, OnInit,ViewChild} from '@angular/core';
-import { EmployeeListObject, Employee } from '../../models/Employee';
+import { Component, OnInit,ViewEncapsulation  } from '@angular/core';
+import { Employee } from '../../models/Employee';
 import { MessageService } from 'primeng/api';
+import { EmployeeService } from '../../services/employee.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-employees',
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.css'],
+  encapsulation: ViewEncapsulation.None,
   providers: [MessageService]
 })
 export class EmployeesComponent implements OnInit {
@@ -14,12 +17,13 @@ export class EmployeesComponent implements OnInit {
   activatePasswordDisplay: boolean = false;
   sendSMSDisplay: boolean = false;
 
-  employees: EmployeeListObject[];
-  selectedEmployees: EmployeeListObject[];
+  employees: Employee[];
+  selectedEmployees: Employee[];
   cols: any[];
   addEditEmployeeHeader: String;
 
   employee: Employee;
+  employeeCount: Number;
 
   smsTemplates: any[];
   selectedSmsTemplate: string;
@@ -29,8 +33,12 @@ export class EmployeesComponent implements OnInit {
 
   cities: any[];
   states: any[];
-  //@ViewChild('f') public userFrm: NgForm;
-  constructor(private messageService: MessageService) {
+  genderGrp: any[];
+
+  registerForm: FormGroup;
+  submitted = false;
+
+  constructor(private messageService: MessageService,private formBuilder: FormBuilder, private empService: EmployeeService) {
     this.employee = new Employee();
     this.cities = [
       { label: 'Select', value: null },
@@ -48,45 +56,47 @@ export class EmployeesComponent implements OnInit {
       { label: 'Istanbul', value: { id: 4, name: 'Istanbul', code: 'IST' } },
       { label: 'Paris', value: { id: 5, name: 'Paris', code: 'PRS' } }
     ];
-    let emp: EmployeeListObject = {
-      profileImage: 'http://images1.fanpop.com/images/image_uploads/Naruto-Uzumaki-uzumaki-naruto-964976_692_659.jpg',
-      name: 'Manish Kumar',
-      role: 'Counter Staff',
-      empId: 1764,
-      contact: '8328006820',
-      email: 'manish.9119@gmail.com',
-      gender: 'male',
-      isActivated: false,
-    }
-    let emp2: EmployeeListObject = {
-      profileImage: 'http://images1.fanpop.com/images/image_uploads/Naruto-Uzumaki-uzumaki-naruto-964976_692_659.jpg',
-      name: ' Kumar',
-      role: 'Counter Staff',
-      empId: 1764,
-      contact: '8328006820',
-      gender: 'male',
-      isActivated: false,
-      email: "kottamanishkumar@gmail.com"
-    }
-    this.employees = [];
-    this.employees.push(emp);
-    this.employees.push(emp2);
+
+    this.genderGrp = [
+      { label: "Male", value: 0 },
+      { label: "Female", value: 1 }
+    ]
 
     this.cols = [
-      { field: 'name', header: 'NAME' },
+      { field: 'fname', header: 'NAME' },
       { field: 'role', header: 'ROLE' },
-      { field: 'empId', header: 'EMP. ID' },
-      { field: 'contact', header: 'CONTACT' },
+      { field: 'employeeId', header: 'EMP. ID' },
+      { field: 'phone', header: 'CONTACT' },
       { field: 'gender', header: 'GENDER' }
     ];
   }
 
   ngOnInit() {
-
+    this.empService.getEmployees().subscribe(
+      (result) => {
+        console.log(result);
+        this.employees = result.employees;
+        this.employeeCount = result.employees.length;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+    this.registerForm = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+  });
   }
 
   onPhotoUpload(event: any) {
-    this.employee.profileImage = event.files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(event.files[0]);
+    reader.onload = () => {
+      this.employee.imageBase64 = reader.result;
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
   }
 
   showDialogAdd() {
@@ -113,8 +123,15 @@ export class EmployeesComponent implements OnInit {
 
   }
 
-  addEmployee() {
-    console.log(this.employee);
+  get f() { return this.registerForm.controls; }
+  addEmployee(f) {
+    this.submitted = true;
+
+    // stop here if form is invalid
+    if (this.registerForm.invalid) {
+        return;
+    }
+    alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.employee))
     this.closeEmpDialog();
   }
 

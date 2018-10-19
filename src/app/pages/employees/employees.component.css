@@ -103,3 +103,17 @@
     font-weight: bold;
 
 }
+
+.no-password i{
+    color:#ffc107;
+}
+
+.display-grid{
+  display:grid;
+}
+
+
+.full-width{
+    width:100%;
+    padding:3px;
+}

@@ -1,5 +1,5 @@
 <div class="emp-wrapper">
-    <p-toast></p-toast>
+  <p-toast></p-toast>
   <div class="row mb-2">
     <div class="col-6">
       <p>Total {{employeeCount}} Employee/s</p>
@@ -11,7 +11,8 @@
             <div class="input-group-prepend">
               <span class="fa fa-search input-group-text"></span>
             </div>
-            <input placeholder="Search by name,id,role,mobile" class="form-control" (input)="dt.filterGlobal($event.target.value, 'contains')"  />
+            <input placeholder="Search by name,id,role,mobile" class="form-control" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            />
           </div>
         </div>
         <div class="col-2">
@@ -54,7 +55,7 @@
           <td>{{emp.gender === 0 ? "M" : emp.gender === 1 ? "F" : ""}}</td>
           <td class="crud-cols">
             <div class="row no-gutters">
-              <div class="col-2 no-password" >
+              <div class="col-2 no-password">
                 <i *ngIf="emp.changePassword" class="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i>
               </div>
               <div class="col-6" (click)="showActivatePasswordDialog(emp)">
@@ -76,7 +77,7 @@
       <p-header>
         <span>{{addEditEmployeeHeader}}</span>
       </p-header>
-      <form [formGroup]="registerForm" (ngSubmit)="addEmployee()" class="form-inline">
+      <form [formGroup]="registerForm" (ngSubmit)="addEmployee(registerForm.value)" class="form-inline">
         <div class="form-row add-emp-wrapper">
           <div clas="col-6">
             <div>
@@ -95,19 +96,22 @@
                 <label for="fname">Name</label>
               </div>
               <div class="col-6">
-                <input type="text" formControlName="firstName" class="form-control" id="name" name="fname"  [ngClass]="{'is-invalid': submitted && f.firstName.invalid }" required>
-                <div *ngIf="submitted && f.firstName.invalid" class="invalid-feedback">
-                    <div *ngIf="f.firstName.errors.required">Name is required</div>
+                <input type="text" formControlName="firstName" class="form-control" id="name" name="fname">
+                <div *ngIf="!registerForm.controls['firstName'].valid && registerForm.controls['firstName'].dirty" class="error">
+                  <div> Name is required</div>
                 </div>
               </div>
-              
+
             </div>
             <div class="form-group mb-2">
               <div class="col-4">
                 <label for="gender">Gender</label>
               </div>
               <div class="col-8">
-                <p-dropdown [options]="genderGrp" [(ngModel)]="employee.gender" name="gender" [autoWidth]="false" styleClass="full-width" [ngModelOptions]="{standalone: true}" ></p-dropdown>
+                <p-dropdown [options]="genderGrp" formControlName="firstName" name="gender" [autoWidth]="false" styleClass="full-width"></p-dropdown>
+                <div *ngIf="!registerForm.controls['gender'].valid && registerForm.controls['gender'].dirty" class="error">
+                  <div> Gender is required</div>
+                </div>
               </div>
             </div>
             <div class="form-group mb-2">
@@ -115,7 +119,8 @@
                 <label for="dob">DOB</label>
               </div>
               <div class="col-8">
-                <p-calendar [(ngModel)]="employee.dob" dateFormat="dd/mm/yy" name="dob" styleClass="display-grid" [ngModelOptions]="{standalone: true}"></p-calendar>
+                <p-calendar formControlName="dob" dateFormat="dd/mm/yy" name="dob" styleClass="display-grid"></p-calendar>
+
               </div>
             </div>
             <div class="form-group mb-2">
@@ -123,7 +128,7 @@
                 <label for="addone">Address Line1</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.addressLine1" class="form-control" id="addone" name="addone ">
+                <input type="text" formControlName="addone" class="form-control" id="addone" name="addone ">
               </div>
             </div>
             <div class="form-group mb-2">
@@ -131,7 +136,7 @@
                 <label for="addtwo">Address Line2</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.addressLine2" class="form-control" id="addtwo" name="addtwo">
+                <input type="text" formControlName="addtwo" class="form-control" id="addtwo" name="addtwo">
               </div>
             </div>
             <div class="form-group mb-2">
@@ -139,8 +144,10 @@
                 <label for="addone">City</label>
               </div>
               <div class="col-8">
-                  <p-dropdown [options]="cities" [(ngModel)]="employee.city" name="city" [autoWidth]="false" styleClass="full-width" [ngModelOptions]="{standalone: true}"></p-dropdown>
-                
+                <!-- <p-dropdown [options]="cities" formControlName="city" name="city" [autoWidth]="false" styleClass="full-width"></p-dropdown> -->
+                <p-autoComplete formControlName="city" [suggestions]="cities" (completeMethod)="filterCity($event)"
+                  field="name" [minLength]="1"></p-autoComplete>
+
               </div>
             </div>
             <div class="form-group mb-2">
@@ -148,7 +155,9 @@
                 <label for="state">State</label>
               </div>
               <div class="col-8">
-                  <p-dropdown [options]="states" [(ngModel)]="employee.state" name="state" [autoWidth]="false" styleClass="full-width" [ngModelOptions]="{standalone: true}"></p-dropdown>
+                <!-- <p-dropdown [options]="states" formControlName="state" name="state" [autoWidth]="false" styleClass="full-width"></p-dropdown> -->
+                <p-autoComplete formControlName="state" [suggestions]="cities" (completeMethod)="filterState($event)"
+                  field="state" [minLength]="1"></p-autoComplete>
               </div>
             </div>
             <div class="form-group mb-2">
@@ -156,7 +165,7 @@
                 <label for="pincode">Pin code</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.pincode" class="form-control" id="pincode" name="pincode">
+                <input type="text" formControlName="pincode" class="form-control" id="pincode" name="pincode">
               </div>
             </div>
           </div>
@@ -169,7 +178,7 @@
                 <label for="education">Education</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.education" class="form-control" id="education" name="education">
+                <input type="text" formControlName="education" class="form-control" id="education" name="education">
               </div>
             </div>
             <div class="form-group mb-2">
@@ -177,7 +186,7 @@
                 <label for="role">Designation/Role</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.designation" class="form-control" id="role" name="role">
+                <input type="text" formControlName="role" class="form-control" id="role" name="role">
               </div>
             </div>
             <div class="form-group mb-2">
@@ -185,7 +194,7 @@
                 <label for="department">Department</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.department" class="form-control" id="department" name="department">
+                <input type="text" formControlName="department" class="form-control" id="department" name="department">
               </div>
             </div>
             <div class="form-group mb-2">
@@ -193,7 +202,7 @@
                 <label for="workloc">Work Location</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.workLocation" class="form-control" id="workloc" name="workloc">
+                <input type="text" formControlName="workloc" class="form-control" id="workloc" name="workloc">
               </div>
             </div>
             <div class="mb-2">
@@ -204,7 +213,7 @@
                 <label for="email">Email ID</label>
               </div>
               <div class="col-8">
-                <input type="email" [(ngModel)]="employee.email" class="form-control" id="email" name="email">
+                <input type="email" formControlName="email" class="form-control" id="email" name="email">
               </div>
             </div>
             <div class="form-group mb-2">
@@ -212,7 +221,7 @@
                 <label for="mobile">Mobile</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.phone" class="form-control" id="mobile" name="mobile">
+                <input type="text" formControlName="mobile" class="form-control" id="mobile" name="mobile">
               </div>
             </div>
             <div class="form-group mb-2">
@@ -220,7 +229,7 @@
                 <label for="idproof">ID Proof</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.idProof" class="form-control" id="idproof" name="idproof">
+                <input type="text" formControlName="idproof" class="form-control" id="idproof" name="idproof">
               </div>
             </div>
             <div class="form-group mb-2">
@@ -228,22 +237,20 @@
                 <label for="addressproff">Address Proof</label>
               </div>
               <div class="col-8">
-                <input type="text" [(ngModel)]="employee.addressProof" class="form-control" id="addressproof" name="addressproof">
+                <input type="text" formControlName="addressproof" class="form-control" id="addressproof" name="addressproof">
               </div>
             </div>
           </div>
         </div>
-      </form>
-      <p-footer>
-        <div class="row no-gutters">
-          <div class="offset-4 col-2">
+        <div class="footer-wrapper">
+          <div class="">
             <button type="submit" class="btn btn-sm btn-emp">Add</button>
           </div>
-          <div class="col-2 cancle-emp-btn">
+          <div class="cancle-emp-btn">
             <a (click)="closeEmpDialog()">Cancel</a>
           </div>
         </div>
-      </p-footer>
+      </form>
     </p-dialog>
     <!-- Send Temp Password  -->
     <p-dialog [(visible)]="activatePasswordDisplay" [width]="500">
@@ -284,44 +291,44 @@
     </p-dialog>
     <!-- Send SMS  -->
     <div class="send-sms-group-wrapper">
-    <p-dialog [(visible)]="sendSMSDisplay" [width]="600">
-      <p-header>
-        Send Group Announcement
-      </p-header>
-      <div class="row no-gutters">
-        <div class="col-4 recipient-wrapper">
-          <div class="recipient-heading">
-            <span>Recipient</span>
-          </div>
-          <div class="recipient-content">
+      <p-dialog [(visible)]="sendSMSDisplay" [width]="600">
+        <p-header>
+          Send Group Announcement
+        </p-header>
+        <div class="row no-gutters">
+          <div class="col-4 recipient-wrapper">
+            <div class="recipient-heading">
+              <span>Recipient</span>
+            </div>
+            <div class="recipient-content">
               <p-multiSelect [options]="employeeGroup" [(ngModel)]="selectedEmpGroupToSendSMS"></p-multiSelect>
+            </div>
           </div>
-        </div>
-        <div class="col-8 sms-template-wrapper">
-          <div class="sms-template">
-            <label class="mr-4">SMS Template</label>
-            <p-dropdown [options]="smsTemplates" [(ngModel)]="selectedSmsTemplate"></p-dropdown>
-          </div>
-          <div class="sms-write-message">
+          <div class="col-8 sms-template-wrapper">
+            <div class="sms-template">
+              <label class="mr-4">SMS Template</label>
+              <p-dropdown [options]="smsTemplates" [(ngModel)]="selectedSmsTemplate"></p-dropdown>
+            </div>
+            <div class="sms-write-message">
               <label class="mb-4">Write your message</label>
               <div>
                 <textarea [rows]="10" [cols]="40" pInputTextarea> </textarea>
               </div>
-          </div>
+            </div>
 
-        </div>
-      </div>
-      <p-footer>
-        <div class="row no-gutters">
-          <div class="offset-4 col-2">
-            <button type="button" class="btn btn-sm btn-emp" (click)="sendGroupSMS()">Send SMS</button>
-          </div>
-          <div class="col-2 cancle-emp-btn">
-            <a (click)="closeSendSMSGropuDailog()">Cancel</a>
           </div>
         </div>
-      </p-footer>
-    </p-dialog>
-  </div>
+        <p-footer>
+          <div class="row no-gutters">
+            <div class="offset-4 col-2">
+              <button type="button" class="btn btn-sm btn-emp" (click)="sendGroupSMS()">Send SMS</button>
+            </div>
+            <div class="col-2 cancle-emp-btn">
+              <a (click)="closeSendSMSGropuDailog()">Cancel</a>
+            </div>
+          </div>
+        </p-footer>
+      </p-dialog>
+    </div>
   </div>
 </div>

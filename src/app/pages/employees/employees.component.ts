@@ -3,6 +3,7 @@ import { Employee } from '../../models/Employee';
 import { MessageService } from 'primeng/api';
 import { EmployeeService } from '../../services/employee.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import cities from '../../cities';
 
 @Component({
   selector: 'app-employees',
@@ -40,22 +41,7 @@ export class EmployeesComponent implements OnInit {
 
   constructor(private messageService: MessageService,private formBuilder: FormBuilder, private empService: EmployeeService) {
     this.employee = new Employee();
-    this.cities = [
-      { label: 'Select', value: null },
-      { label: 'New York', value: { id: 1, name: 'New York', code: 'NY' } },
-      { label: 'Rome', value: { id: 2, name: 'Rome', code: 'RM' } },
-      { label: 'London', value: { id: 3, name: 'London', code: 'LDN' } },
-      { label: 'Istanbul', value: { id: 4, name: 'Istanbul', code: 'IST' } },
-      { label: 'Paris', value: { id: 5, name: 'Paris', code: 'PRS' } }
-    ];
-    this.states = [
-      { label: 'Select', value: null },
-      { label: 'New York', value: { id: 1, name: 'New York', code: 'NY' } },
-      { label: 'Rome', value: { id: 2, name: 'Rome', code: 'RM' } },
-      { label: 'London', value: { id: 3, name: 'London', code: 'LDN' } },
-      { label: 'Istanbul', value: { id: 4, name: 'Istanbul', code: 'IST' } },
-      { label: 'Paris', value: { id: 5, name: 'Paris', code: 'PRS' } }
-    ];
+    this.cities = cities;
 
     this.genderGrp = [
       { label: "Male", value: 0 },
@@ -84,6 +70,20 @@ export class EmployeesComponent implements OnInit {
     );
     this.registerForm = this.formBuilder.group({
       firstName: ['', Validators.required],
+      gender:['', Validators.required],
+      dob:[''],
+      addone:[''],
+      addtwo:[''],
+      city:[''],
+      state:[''],
+      pincode:[''],
+      education:[''],
+      role:[''],
+      department:[''],
+      workloc:[''],
+      mobile:[''],
+      idproof:[''],
+      addressproof:[''],
       email: ['', [Validators.required, Validators.email]],
   });
   }
@@ -127,6 +127,8 @@ export class EmployeesComponent implements OnInit {
   addEmployee(f) {
     this.submitted = true;
 
+    console.log(f);
+    console.log(this.registerForm)
     // stop here if form is invalid
     if (this.registerForm.invalid) {
         return;
@@ -150,5 +152,13 @@ export class EmployeesComponent implements OnInit {
   }
   closeActivatePassDialog() {
     this.activatePasswordDisplay = false;
+  }
+
+  filterCity(event:any){
+     this.cities.map()
+  }
+
+  filterState(event:any){
+
   }
 }

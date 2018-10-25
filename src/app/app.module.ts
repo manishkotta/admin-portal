@@ -25,6 +25,7 @@ import { TabViewModule } from 'primeng/tabview';
 import {CalendarModule} from 'primeng/calendar';
 import { ScheduleHoursComponent } from './components/schedule-hours/schedule-hours.component';
 import { CalenderComponent } from './components/calender/calender.component';
+import {AutoCompleteModule} from 'primeng/autocomplete';
 
 import { TitleService } from './services/title.service';
 import { EmployeeService } from './services/employee.service';
@@ -83,7 +84,8 @@ const APP_TITLE = 'KASHI!';
     BrowserAnimationsModule,
     HttpClientModule,
     CalendarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AutoCompleteModule
   ],
   providers: [TitleService,EmployeeService],
   bootstrap: [AppComponent]

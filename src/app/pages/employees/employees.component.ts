@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewEncapsulation  } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Employee } from '../../models/Employee';
 import { MessageService } from 'primeng/api';
 import { EmployeeService } from '../../services/employee.service';
@@ -39,7 +39,7 @@ export class EmployeesComponent implements OnInit {
   registerForm: FormGroup;
   submitted = false;
 
-  constructor(private messageService: MessageService,private formBuilder: FormBuilder, private empService: EmployeeService) {
+  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private empService: EmployeeService) {
     this.employee = new Employee();
     this.cities = cities;
 
@@ -70,22 +70,22 @@ export class EmployeesComponent implements OnInit {
     );
     this.registerForm = this.formBuilder.group({
       firstName: ['', Validators.required],
-      gender:['', Validators.required],
-      dob:[''],
-      addone:[''],
-      addtwo:[''],
-      city:[''],
-      state:[''],
-      pincode:[''],
-      education:[''],
-      role:[''],
-      department:[''],
-      workloc:[''],
-      mobile:[''],
-      idproof:[''],
-      addressproof:[''],
+      gender: ['', Validators.required],
+      dob: [''],
+      addone: [''],
+      addtwo: [''],
+      city: [''],
+      state: [''],
+      pincode: [''],
+      education: [''],
+      role: [''],
+      department: [''],
+      workloc: [''],
+      mobile: [''],
+      idproof: [''],
+      addressproof: [''],
       email: ['', [Validators.required, Validators.email]],
-  });
+    });
   }
 
   onPhotoUpload(event: any) {
@@ -131,7 +131,7 @@ export class EmployeesComponent implements OnInit {
     console.log(this.registerForm)
     // stop here if form is invalid
     if (this.registerForm.invalid) {
-        return;
+      return;
     }
     alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.employee))
     this.closeEmpDialog();
@@ -154,11 +154,15 @@ export class EmployeesComponent implements OnInit {
     this.activatePasswordDisplay = false;
   }
 
-  filterCity(event:any){
-     this.cities.map()
+  filterCity(event: any) {
+    this.cities = cities.map((s) => {
+      return s.name.includes(event.query);
+    })
   }
 
-  filterState(event:any){
-
+  filterState(event: any) {
+    this.states = cities.map((s) => {
+      return s.state.includes(event.query);
+    })
   }
 }

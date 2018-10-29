@@ -25,7 +25,7 @@
     </div>
   </div>
   <div>
-    <p-table #dt [value]="employees" [(selection)]="selectedEmployees" [columns]="cols">
+    <p-table #dt [value]="employees" [(selection)]="selectedEmployees" [paginator]="true" [rows]="8" [columns]="cols">
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th style="width: 3em">
@@ -65,7 +65,7 @@
           </td>
           <td class="crud-cols">
             <div (click)="showDialogEdit(emp)">
-              <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+              <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
             </div>
 
           </td>
@@ -93,22 +93,32 @@
             </div>
             <div class="form-group mb-2">
               <div class="col-4">
-                <label for="fname">Name</label>
+                <label for="fname">First Name</label>
               </div>
               <div class="col-6">
-                <input type="text" formControlName="firstName" class="form-control" id="name" name="fname">
+                <input type="text" formControlName="firstName" class="form-control" id="fname" name="fname">
                 <div *ngIf="!registerForm.controls['firstName'].valid && registerForm.controls['firstName'].dirty" class="error">
-                  <div> Name is required</div>
+                  <div> First Name is required</div>
                 </div>
               </div>
-
+            </div>
+            <div class="form-group mb-2">
+              <div class="col-4">
+                <label for="lname">Last Name</label>
+              </div>
+              <div class="col-6">
+                <input type="text" formControlName="lastName" class="form-control" id="lname" name="lname">
+                <div *ngIf="!registerForm.controls['lastName'].valid && registerForm.controls['lastName'].dirty" class="error">
+                  <div> Last Name is required</div>
+                </div>
+              </div>
             </div>
             <div class="form-group mb-2">
               <div class="col-4">
                 <label for="gender">Gender</label>
               </div>
               <div class="col-8">
-                <p-dropdown [options]="genderGrp" formControlName="firstName" name="gender" [autoWidth]="false" styleClass="full-width"></p-dropdown>
+                <p-dropdown [options]="genderGrp" formControlName="gender" name="gender" [autoWidth]="false" styleClass="full-width"></p-dropdown>
                 <div *ngIf="!registerForm.controls['gender'].valid && registerForm.controls['gender'].dirty" class="error">
                   <div> Gender is required</div>
                 </div>
@@ -143,10 +153,10 @@
               <div class="col-4">
                 <label for="addone">City</label>
               </div>
-              <div class="col-8">
+              <div class="col-8 city-drp">
                 <!-- <p-dropdown [options]="cities" formControlName="city" name="city" [autoWidth]="false" styleClass="full-width"></p-dropdown> -->
-                <p-autoComplete formControlName="city" [suggestions]="cities" (completeMethod)="filterCity($event)"
-                  field="name" [minLength]="1"></p-autoComplete>
+                <p-autoComplete formControlName="city" [suggestions]="cities" (completeMethod)="filterCity($event)" field="name" [minLength]="1"
+                  [dropdown]="true" (onSelect)="citySelectHndlr(value)"></p-autoComplete>
 
               </div>
             </div>
@@ -154,10 +164,10 @@
               <div class="col-4">
                 <label for="state">State</label>
               </div>
-              <div class="col-8">
+              <div class="col-8 city-drp">
                 <!-- <p-dropdown [options]="states" formControlName="state" name="state" [autoWidth]="false" styleClass="full-width"></p-dropdown> -->
-                <p-autoComplete formControlName="state" [suggestions]="cities" (completeMethod)="filterState($event)"
-                  field="state" [minLength]="1"></p-autoComplete>
+                <p-autoComplete formControlName="state" [suggestions]="states" (completeMethod)="filterState($event)" field="state" [minLength]="1"
+                  [dropdown]="true" disabled="true"></p-autoComplete>
               </div>
             </div>
             <div class="form-group mb-2">
@@ -257,37 +267,37 @@
       <p-header>
         Send temporary password to
       </p-header>
-      <div class="form-row mt-4 mb-4">
-        <div class="col-5">
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
-            <label class="custom-control-label font-weight-bold" for="customRadioInline1">Mobile Number</label>
+      <form [formGroup]="forgotPaaswordForm" (ngSubmit)="sendTemporaryPassword(forgotPaaswordForm.value)">
+        <div class="form-row mt-4 mb-4">
+          <div class="col-5">
+            <div class="custom-control custom-radio custom-control-inline">
+              <p-radioButton value="phone" formControlName="emailOrPhone" name="emailOrPhone"></p-radioButton>
+              <label class="font-weight-bold" for="customRadioInline1">Mobile Number</label>
+            </div>
+            <div class="ml-4">
+              <span>{{employee.phone}}</span>
+            </div>
           </div>
-          <div class="ml-4">
-            <span></span>
+          <div class="col-7">
+            <div class="custom-control custom-radio custom-control-inline">
+                <p-radioButton value="email" formControlName="emailOrPhone" name="emailOrPhone"></p-radioButton>
+              <label class="font-weight-bold" for="customRadioInline2">Email Address</label>
+            </div>
+            <div class="ml-4">
+              <span>{{employee.email}}</span>
+            </div>
           </div>
         </div>
-        <div class="col-7">
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
-            <label class="custom-control-label font-weight-bold" for="customRadioInline2">Email Address</label>
-          </div>
-          <div class="ml-4">
-            <span></span>
-          </div>
-        </div>
-      </div>
 
-      <p-footer>
-        <div class="row no-gutters">
-          <div class="offset-4 col-2">
-            <button type="button" class="btn btn-sm btn-emp" (click)="sendTemporaryPassword()">Send</button>
+        <div class="footer-wrapper">
+          <div class="">
+            <button type="submit" class="btn btn-sm btn-emp">Send</button>
           </div>
-          <div class="col-2 cancle-emp-btn">
+          <div class=" cancle-emp-btn">
             <a (click)="closeActivatePassDialog()">Cancel</a>
           </div>
         </div>
-      </p-footer>
+      </form>
     </p-dialog>
     <!-- Send SMS  -->
     <div class="send-sms-group-wrapper">

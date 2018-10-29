@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,Output,EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-calender',
@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class CalenderComponent implements OnInit {
 
   @Input() date: Date;
+  @Output() selectedDate = new EventEmitter<Date>();
   weeks: any[];
   days: any[];
   constructor() {
@@ -40,8 +41,12 @@ export class CalenderComponent implements OnInit {
 
       counter++
     }
-    console.log(this.days);
-    console.log(this.weeks);
+    // console.log(this.days);
+    // console.log(this.weeks);
+  }
+
+  dateSelected(d){
+    this.selectedDate.emit(d);
   }
 
 }

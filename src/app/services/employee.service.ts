@@ -12,8 +12,21 @@ export class EmployeeService {
   constructor(private http: HttpClient) { }
 
   getEmployees(): Observable<any> {
-    return this.http.get<any>(API_URL + '/employee/getemployees?accesstoken=qwerty')
+    return this.http.get<any>(API_URL + '/employee/getemployees?accesstoken=qwerty');
   }
+
+  addEmployee(employeeServiceObj : any) : Observable<any>{
+    return this.http.put<any>(API_URL + '/employee/addemployee',employeeServiceObj);
+  }
+
+  sendOtp(mobNum:String):Observable<any>{
+     return this.http.get<any>("https://2factor.in/API/V1/9775cb52-f069-11e7-a328-0200cd936042/SMS/"+mobNum+"/AUTOGEN")
+  }
+
+  passwordReset(email:String):Observable<any>{
+    return this.http.post(API_URL+"/authentication/forgotpassword?userid="+email,"");
+  }
+
 }
 
 

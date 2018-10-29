@@ -13,6 +13,8 @@ export class ScheduleTicketComponent implements OnInit {
   selectedPoojaType : any;
   calenderDates:Date[];
 
+  scheduleDate:Date;
+
   constructor() {
     this.calenderDates =[];
     let d = new Date();
@@ -71,18 +73,21 @@ export class ScheduleTicketComponent implements OnInit {
       }
     ];
     this.darshanTabs = [
-      { header: "e-Darshan", content: content },
-      { header: "e-Pooja", content: content },
+      { header: "General and Special Darshan", content: content },
       { header: "VIP", content: content },
-      { header: "Sr.Citizen & Divyang", content: content },
-      { header: "Staff", content: content }
+      { header: "Sr.Citizen & Divyang", content: content }
     ]
     this.selectedPoojaType = this.darshanTabs[0];
-    console.log(this.calenderDates);
+    // console.log(this.calenderDates);
   }
 
   ngOnInit() {
   }
+
+  onCalendarDateClick(event){
+    this.scheduleDate=event;
+  }
+
   onPoojaTypeSelect(link){
     this.selectedPoojaType = link;
   }

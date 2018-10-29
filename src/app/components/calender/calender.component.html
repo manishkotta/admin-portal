@@ -13,9 +13,9 @@
        <td>SAT</td>
      </tr>
      <tr class="calender-content" *ngFor="let week of weeks">
-        <td *ngFor="let day of week" [class.bg-green]="day">
+        <td *ngFor="let day of week" class="calender-block" [class.bg-green]="day" (click)="dateSelected(day)">
           <div class="block" *ngIf="day">
-           <span>
+           <span >
              {{day | date : 'd'}}
            </span>
           </div>

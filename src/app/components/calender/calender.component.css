@@ -23,6 +23,9 @@
 .block{
     width:100%;
 }
+.calender-block:hover{
+ background-color: lightblue;
+}
 
 .calendar-heading td{
     font-size: 11px;

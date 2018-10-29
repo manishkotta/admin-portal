@@ -3,7 +3,7 @@ import { Employee } from '../../models/Employee';
 import { MessageService } from 'primeng/api';
 import { EmployeeService } from '../../services/employee.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import cities from '../../cities';
+import citiesList from '../../cities';
 
 @Component({
   selector: 'app-employees',
@@ -37,11 +37,16 @@ export class EmployeesComponent implements OnInit {
   genderGrp: any[];
 
   registerForm: FormGroup;
+  forgotPaaswordForm:FormGroup;
   submitted = false;
 
   constructor(private messageService: MessageService, private formBuilder: FormBuilder, private empService: EmployeeService) {
     this.employee = new Employee();
-    this.cities = cities;
+
+    this.cities = citiesList;
+    this.states = citiesList;
+
+    // this.cities = [{"name":"manish",code:"M"},{"name":"Kumar",code:"K"}]
 
     this.genderGrp = [
       { label: "Male", value: 0 },
@@ -70,6 +75,7 @@ export class EmployeesComponent implements OnInit {
     );
     this.registerForm = this.formBuilder.group({
       firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       gender: ['', Validators.required],
       dob: [''],
       addone: [''],
@@ -86,6 +92,10 @@ export class EmployeesComponent implements OnInit {
       addressproof: [''],
       email: ['', [Validators.required, Validators.email]],
     });
+
+    this.forgotPaaswordForm = this.formBuilder.group({
+      emailOrPhone: ['',Validators.required]
+   });
   }
 
   onPhotoUpload(event: any) {
@@ -126,13 +136,44 @@ export class EmployeesComponent implements OnInit {
   get f() { return this.registerForm.controls; }
   addEmployee(f) {
     this.submitted = true;
-
-    console.log(f);
-    console.log(this.registerForm)
     // stop here if form is invalid
     if (this.registerForm.invalid) {
       return;
     }
+
+    let employeeServiceObject = {
+      accessToken: "NWZ78QDTWPRD3GBJDLV7174N6N714NILMTLZ49CKGIS1PZFQS4ZW9ZKEAEOE21KJOETX4D6RBSDI9HCJS7HCRHVL1KQPJ4K7HRQKRKCZ78MXOCQXHJBW1TAMKBBNDWI82YP3KZZX15POQN9EC2BVYA860A3DNTELNIFLIBCTQQTWQDPU5A8BBOOD4RGPA6PDRYIZ7XPKSXTC5PA8MR1STVBGKS47MUV66180S13S0KAX41H3GW1L58ZZA8ESACE7",
+      employee: {
+        fname: f.firstName,
+        lname: f.lastName,
+        email: f.email,
+        phone: f.mobile,
+        employeeTypeId: 4,
+        dob: f.dob,
+        gender: f.gender,
+        counterId: 3,
+        departmentId: 2,
+        workLocation: f.workloc,
+        userTypeId: 2,
+        idProof: f.idproof,
+        idProofNumber: '123456'
+      },
+      address: {
+        address1: f.addone,
+        address2: f.addtwo,
+        city: f.city ? f.city.name : "",
+        state: f.state ? f.state.state : "",
+        pinCode: f.pincode
+      }
+    }
+    this.empService.addEmployee(employeeServiceObject).subscribe(
+      (result) => {
+        this.messageService.add({severity:'success', summary:'Add Employee', detail:'Employee has been added successfully'})
+      },
+      (err) => {
+        this.messageService.add({severity:'error', summary:'Add Employee', detail:'Failed to add employee.'})
+      }
+    )
     alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.employee))
     this.closeEmpDialog();
   }
@@ -147,22 +188,65 @@ export class EmployeesComponent implements OnInit {
     this.employee = emp;
   }
 
-  sendTemporaryPassword() {
-
+  sendTemporaryPassword(f) {
+    if(f.emailOrPhone === "email"){
+        this.empService.passwordReset(this.employee.email).subscribe(
+          (result)=>{
+             this.messageService.add({severity:'success', summary:'Password Reset Message', detail:'Link has been sent to the registered email.'})
+          },
+          (err)=>{
+            this.messageService.add({severity:'error', summary:'Password Reset Message', detail:'Failed to send a reset link to the registered email.'})
+          }
+        )
+    }else{
+      this.empService.sendOtp(this.employee.phone).subscribe(
+        (result)=>{
+          this.messageService.add({severity:'success', summary:'Password Reset Message', detail:'OTP has been sent to the registered mobile number.'})
+        },
+        (err)=>{
+          this.messageService.add({severity:'error', summary:'Password Reset Message', detail:'Failed to send OTP to the registered mobile number.'})
+        }
+      )
+    }
+    this.closeActivatePassDialog();
   }
   closeActivatePassDialog() {
     this.activatePasswordDisplay = false;
   }
 
   filterCity(event: any) {
-    this.cities = cities.map((s) => {
-      return s.name.includes(event.query);
-    })
+    if (event.query) {
+      this.cities = citiesList.map((s) => {
+        if (s.name.includes(event.query))
+          return s;
+      }).filter(s => s !== undefined)
+    }
+    else {
+      this.cities = citiesList;
+    }
+  }
+
+  citySelectHndlr(value:any){
+    this.registerForm.controls['state'].setValue(this.registerForm.controls['city'].value);
   }
 
   filterState(event: any) {
-    this.states = cities.map((s) => {
-      return s.state.includes(event.query);
-    })
+    if (event.query) {
+      let statesGrp = citiesList.map((s) => {
+        if (s.state.includes(event.query))
+          return s;
+      }).filter(s => s !== undefined)
+
+      statesGrp.filter((elem, index, self) => {
+        return index === self.findIndex((t) => (
+          t.state === elem.state
+        ))
+      })
+      this.states = statesGrp;
+      console.log(this.states);
+    }
+    else {
+      this.states = citiesList;
+    }
   }
 }

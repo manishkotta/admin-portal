@@ -26,7 +26,7 @@ import {CalendarModule} from 'primeng/calendar';
 import { ScheduleHoursComponent } from './components/schedule-hours/schedule-hours.component';
 import { CalenderComponent } from './components/calender/calender.component';
 import {AutoCompleteModule} from 'primeng/autocomplete';
-
+import {RadioButtonModule} from 'primeng/radiobutton';
 import { TitleService } from './services/title.service';
 import { EmployeeService } from './services/employee.service';
 import { Title } from '@angular/platform-browser';
@@ -85,7 +85,8 @@ const APP_TITLE = 'KASHI!';
     HttpClientModule,
     CalendarModule,
     ReactiveFormsModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    RadioButtonModule
   ],
   providers: [TitleService,EmployeeService],
   bootstrap: [AppComponent]

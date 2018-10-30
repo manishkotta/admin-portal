@@ -41,23 +41,8 @@
       <div>
         <!-- Component -->
         <div class="row no-gutters ticket-slots">
-          <div class="col-2">
-            <div class="slot-block-heading-1">
-              Morning
-            </div>
-            <div class="slot-block-heading-2">
-              Tickets
-            </div>
-          </div>
-
-          <div class="col" *ngFor="let i of selectedPoojaType.content[0].data">
-            <div class="slot-block-1">
-              {{i.hour}}
-            </div>
-            <div class="slot-block-2" [class.font-red]="i.availableTickets < i.maxTickets">
-              {{i.availableTickets}}
-            </div>
-          </div>
+          
+        </div>
 
         </div>
       </div>

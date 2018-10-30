@@ -10,5 +10,15 @@ const API_URL = environment.baseApiUrl;
 })
 export class ScheduleService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+
+
+  getTimeSlots(): Observable<any> {
+    return this.http.get(API_URL + "/schedule/gettimeslots?accesstoken=abcdpop");
+  }
+
+  getServices(): Observable<any> {
+    return this.http.get(API_URL + "/schedule/getservices?accesstoken=abcdpop");
+  }
+
 }

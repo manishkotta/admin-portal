@@ -34,7 +34,7 @@ import { ReportsComponent } from './pages/reports/reports.component';
 import { DarshanReportComponent } from './components/darshan-report/darshan-report.component';
 import { LiveDevoteeReportComponent } from './components/live-devotee-report/live-devotee-report.component';
 import { LiveDevoteeInOutComponent } from './components/live-devotee-in-out/live-devotee-in-out.component';
-
+import {FieldsetModule} from 'primeng/fieldset';
 
 const routes: Routes = [
   { path: 'employees', component: EmployeesComponent, data: { title: "Employees" }, },
@@ -86,7 +86,8 @@ const APP_TITLE = 'KASHI!';
     CalendarModule,
     ReactiveFormsModule,
     AutoCompleteModule,
-    RadioButtonModule
+    RadioButtonModule,
+    FieldsetModule
   ],
   providers: [TitleService,EmployeeService],
   bootstrap: [AppComponent]

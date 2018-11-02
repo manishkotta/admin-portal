@@ -20,12 +20,12 @@ export class SidebarComponent implements OnInit {
   constructor() {
 
     this.links = [
-      { text: 'Dashboard', route: '/dashboard', icon: 'fa fa-tachometer' },
-      { text: 'Schedule & Ticket Management', route: '/schedule-ticket', icon: 'fa fa-calendar' },
-      { text: 'Employees', route: '/employees', icon: 'fa fa-address-card-o' },
-      { text: 'Notifications', route: '/notifications', icon: 'fa fa-bell-o' },
-      { text: 'SMS Management', route: '/sms-management', icon: 'fa fa-mobile fa-lg' },
-      { text: 'Reports', route: '/reports', icon: 'fa fa-bar-chart' }
+      { text: 'Dashboard', route: '/admin/dashboard', icon: 'fa fa-tachometer' },
+      { text: 'Schedule & Ticket Management', route: '/admin/schedule-ticket', icon: 'fa fa-calendar' },
+      { text: 'Employees', route: '/admin/employees', icon: 'fa fa-address-card-o' },
+      { text: 'Notifications', route: '/admin/notifications', icon: 'fa fa-bell-o' },
+      { text: 'SMS Management', route: '/admin/sms-management', icon: 'fa fa-mobile fa-lg' },
+      { text: 'Reports', route: '/admin/reports', icon: 'fa fa-bar-chart' }
     ];
 
     this.selectedLink = null;

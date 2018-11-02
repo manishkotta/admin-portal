@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
 import * as d3 from 'd3';
+
+import { ReportsService } from '../../services/reports.service';
 
 @Component({
   selector: 'app-darshan-report',
@@ -10,7 +11,7 @@ import * as d3 from 'd3';
 export class DarshanReportComponent implements OnInit {
 
   darshanReportData: any[];
-  constructor() {
+  constructor(private reportService: ReportsService) {
     this.darshanReportData = [
       { date: "10/11/2006", online: 10, walkin: 15 },
       { date: "11/10/2007", online: 12, walkin: 18 },
@@ -28,6 +29,7 @@ export class DarshanReportComponent implements OnInit {
 
   ngOnInit() {
     this.darshanReport(this.darshanReportData);
+    this.reportService.getDarshanReport();
   }
 
   darshanReport(data) {
@@ -64,7 +66,7 @@ export class DarshanReportComponent implements OnInit {
     y.domain([0, d3.max(data, function (d) { return d.total; })]).nice();
 
     var stackedData = d3.stack().keys(keys)(data);
- 
+
     g.append("g")
       .selectAll("g")
       .data(stackedData)
@@ -76,7 +78,7 @@ export class DarshanReportComponent implements OnInit {
       .attr("x", function (d) { return x(d.data[mainKey]); })
       .attr("y", function (d) { return y(d[1]); })
       .attr("height", function (d) { return y(d[0]) - y(d[1]); })
-      .attr("width",x.bandwidth())
+      .attr("width", x.bandwidth())
       .on("mouseover", function (d) {
         // div.transition()
         //     .duration(200)
@@ -96,10 +98,10 @@ export class DarshanReportComponent implements OnInit {
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%d %b")))
       .selectAll("text")
-      // .attr("y", 0)
-      // .attr("x", 9)
-      // .attr("dy", ".35em")
-      // .style("text-anchor", "start");
+    // .attr("y", 0)
+    // .attr("x", 9)
+    // .attr("dy", ".35em")
+    // .style("text-anchor", "start");
 
     g.append("g")
       .attr("class", "yaxis")

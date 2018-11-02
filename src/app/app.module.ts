@@ -9,8 +9,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule,ReactiveFormsModule  } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 /* PrimeNg Imports */
 import { TableModule } from 'primeng/table';
@@ -22,11 +22,11 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { TabViewModule } from 'primeng/tabview';
-import {CalendarModule} from 'primeng/calendar';
+import { CalendarModule } from 'primeng/calendar';
 import { ScheduleHoursComponent } from './components/schedule-hours/schedule-hours.component';
 import { CalenderComponent } from './components/calender/calender.component';
-import {AutoCompleteModule} from 'primeng/autocomplete';
-import {RadioButtonModule} from 'primeng/radiobutton';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { TitleService } from './services/title.service';
 import { EmployeeService } from './services/employee.service';
 import { Title } from '@angular/platform-browser';
@@ -34,20 +34,31 @@ import { ReportsComponent } from './pages/reports/reports.component';
 import { DarshanReportComponent } from './components/darshan-report/darshan-report.component';
 import { LiveDevoteeReportComponent } from './components/live-devotee-report/live-devotee-report.component';
 import { LiveDevoteeInOutComponent } from './components/live-devotee-in-out/live-devotee-in-out.component';
-import {FieldsetModule} from 'primeng/fieldset';
+import { FieldsetModule } from 'primeng/fieldset';
+import { LoginComponent } from './pages/login/login.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { MainComponent } from 'src/app/pages/main/main.component';
+
+import { AuthGuardService} from 'src/app/services/auth-guard.service';
 
 const routes: Routes = [
-  { path: 'employees', component: EmployeesComponent, data: { title: "Employees" }, },
-  { path: 'schedule-ticket', component: ScheduleTicketComponent, data: { title: "Schedule & Ticket Management" }, },
   {
-    path: 'reports', component: ReportsComponent, data: { title: 'reports' },
-    children: [
-      { path: 'darshan-report', component: DarshanReportComponent },
-      { path: 'online-walkin-report', component: LiveDevoteeReportComponent },
-      { path: 'live-in-out', component: LiveDevoteeInOutComponent }
+    path: 'admin', component: MainComponent, canActivate:[AuthGuardService], children: [
+      { path: 'employees', component: EmployeesComponent, data: { title: "Employees" }, },
+      { path: 'schedule-ticket', component: ScheduleTicketComponent, data: { title: "Schedule & Ticket Management" }, },
+      {
+        path: 'reports', component: ReportsComponent, data: { title: 'reports' },
+        children: [
+          { path: 'darshan-report', component: DarshanReportComponent },
+          { path: 'online-walkin-report', component: LiveDevoteeReportComponent },
+          { path: 'live-in-out', component: LiveDevoteeInOutComponent }
+        ]
+      },
     ]
   },
-  { path: '', component: ScheduleTicketComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: '', component: LoginComponent },
 ];
 
 const APP_TITLE = 'KASHI!';
@@ -65,7 +76,10 @@ const APP_TITLE = 'KASHI!';
     ReportsComponent,
     DarshanReportComponent,
     LiveDevoteeReportComponent,
-    LiveDevoteeInOutComponent
+    LiveDevoteeInOutComponent,
+    LoginComponent,
+    ForgotPasswordComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,
@@ -89,7 +103,7 @@ const APP_TITLE = 'KASHI!';
     RadioButtonModule,
     FieldsetModule
   ],
-  providers: [TitleService,EmployeeService],
+  providers: [TitleService, EmployeeService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

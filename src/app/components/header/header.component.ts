@@ -21,4 +21,9 @@ export class HeaderComponent implements OnInit {
       })
   }
 
+  onLogOut(){
+    sessionStorage.removeItem('auth_token');
+    sessionStorage.removeItem('login_valid');
+  }
+
 }

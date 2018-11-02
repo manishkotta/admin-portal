@@ -11,7 +11,9 @@ body {
     /* 	font-family: 'Varela Round', sans-serif; */
       overflow: hidden;
     }
-    
+    .modal-header{ 
+     display:block !important;
+    }
     .modal-login {
         color: #636363;
         width: 350px;
@@ -84,4 +86,10 @@ body {
     
     .modal-login.modal-dialog {
         margin-top: 80px;
+    }
+
+    .modal-login button{
+        color: #fff;
+        background-color: #f0ad4e;
+        border-color: #eea236;
     }

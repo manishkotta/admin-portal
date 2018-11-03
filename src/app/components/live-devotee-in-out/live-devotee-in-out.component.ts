@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { ReportsService } from '../../services/reports.service';
 
 @Component({
   selector: 'app-live-devotee-in-out',
@@ -10,7 +11,7 @@ export class LiveDevoteeInOutComponent implements OnInit {
 
   parseTime: any;
   liveReportGroup: any[];
-  constructor() {
+  constructor(private reportService: ReportsService) {
 
     this.parseTime = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
     this.liveReportGroup = [
@@ -29,7 +30,15 @@ export class LiveDevoteeInOutComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initReport(this.liveReportGroup);
+    this.reportService.getLiveInOutReport().subscribe(
+      result => {
+        if (result.status === 200)
+          this.initReport(result)
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
 
@@ -40,6 +49,8 @@ export class LiveDevoteeInOutComponent implements OnInit {
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    var xData = data.labels || [];
+    var yData = data.data || [];
 
     var x0 = d3.scaleBand()
       .rangeRound([0, width])
@@ -52,16 +63,27 @@ export class LiveDevoteeInOutComponent implements OnInit {
       z = d3.scaleOrdinal()
         .range(["#03B7D3", "#F27535"]);
 
-    var keys = d3.keys(data[0]).slice(1);
+    var keys = ["online", "walkin"];
 
-    console.log(x0.bandwidth());
-    x0.domain(data.map(function (d) { return d.date; }));
+    let yDataModified = [];
+
+    for (var i = 0; i < yData[0].length && i < yData[1].length; i++) {
+      let o = {
+        date: xData[i],
+        "online": parseInt(yData[0][i]) + i,
+        "walkin": parseInt(yData[1][i]) + i
+      }
+      yDataModified.push(o);
+    }
+
+    console.log(yDataModified, "ymodified");
+    x0.domain(xData.map(function (d) { return d; }));
     x1.domain(keys).rangeRound([0, x0.bandwidth()]);
-    y.domain([0, d3.max(data, function (d) { return d3.max(keys, function (key) { return d[key]; }); })]).nice();
+    y.domain([0, d3.max(yDataModified, function (d) { return d3.max(keys, function (key) { return d[key]; }); })]).nice()
 
     g.append("g")
       .selectAll("g")
-      .data(data)
+      .data(yDataModified)
       .enter().append("g")
       .attr("transform", function (d) { return "translate(" + x0(d.date) + ",0)"; })
       .selectAll("rect")
@@ -76,7 +98,7 @@ export class LiveDevoteeInOutComponent implements OnInit {
     g.append("g")
       .attr("class", "axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x0).ticks(5));
+      .call(d3.axisBottom(x0).ticks(10));
 
     g.append("g")
       .attr("class", "axis")
@@ -100,13 +122,13 @@ export class LiveDevoteeInOutComponent implements OnInit {
       .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
 
     legend.append("rect")
-      .attr("x", width - 19)
+      .attr("x", width + 5)
       .attr("width", 19)
       .attr("height", 19)
       .attr("fill", z);
 
     legend.append("text")
-      .attr("x", width - 24)
+      .attr("x", width + 5)
       .attr("y", 9.5)
       .attr("dy", "0.32em")
       .text(function (d) { return d; });

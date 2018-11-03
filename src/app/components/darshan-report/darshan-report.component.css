@@ -6,3 +6,19 @@
 .tick line{
    stroke: #DDDDDD
 }
+
+.ui-inputgroup .ui-inputgroup-addon{
+  padding:4px !important;
+  font-size: 14px;
+}
+
+
+.ui-inputgroup i {
+  margin-top: 3px;
+  margin-right: 8px;
+}
+
+.filter-icon{
+  padding:5px;
+  font-size:14px;
+}

@@ -1,16 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import * as d3 from 'd3';
-
 import { ReportsService } from '../../services/reports.service';
 
 @Component({
   selector: 'app-darshan-report',
   templateUrl: './darshan-report.component.html',
-  styleUrls: ['./darshan-report.component.css']
+  styleUrls: ['./darshan-report.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DarshanReportComponent implements OnInit {
 
   darshanReportData: any[];
+
+  filterType: any[];
+  selectedType: any;
+
+  darshanTypeGrp: any[];
+  selectedDarshanType: any;
+
+  bookingTypeGrp: any[];
+  selectedBookingType: any;
+
+  dateRange: any[];
+  selectedDateRange: any;
+
+  results: any;
+
   constructor(private reportService: ReportsService) {
     this.darshanReportData = [
       { date: "10/11/2006", online: 10, walkin: 15 },
@@ -25,21 +40,58 @@ export class DarshanReportComponent implements OnInit {
       { date: "10/01/2015", online: 16, walkin: 19 },
       { date: "10/02/2016", online: 19, walkin: 17 },
     ];
+
+    this.filterType = [
+      { label: "Free", value: 0 },
+      { label: "Paid", value: 1 }
+    ]
+    this.darshanTypeGrp = [
+      { label: "E-Darshan", value: 1 },
+      { label: "E-Pooja", value: 2 }
+    ]
+    this.bookingTypeGrp = [
+      { label: "Online & Walkin", value: 0 },
+      { label: "Online", value: 1 },
+      { label: "Walkin", value: 2 },
+    ]
+
+    this.dateRange = [
+      { label: "Last 7 days", value: 1 },
+      { label: "Last 14 days", value: 2 },
+      { label: "Last 30 days", value: 3 }
+    ]
+
+    this.selectedDateRange = 3;
+    this.selectedBookingType = 0;
+    this.selectedType = 1;
+
   }
 
   ngOnInit() {
-    this.darshanReport(this.darshanReportData);
-    this.reportService.getDarshanReport();
+    this.reportService.getDarshanReport("1").subscribe(
+      result => {
+        if (result.status === 200) {
+          this.results = result;
+          this.processData();
+        }
+      },
+      err => {
+
+      }
+    )
   }
 
   darshanReport(data) {
-    var svg = d3.select("svg"),
+    console.log(data);
+    d3.select("svg").remove();
+    if(data.length <= 0) return;
+    var svg = d3.select(".darshan-report").append('svg').attr('width', 875).attr('height', 500),
       margin = { top: 20, right: 20, bottom: 50, left: 40 },
       width = +svg.attr("width") - margin.left - margin.right,
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr('class', 'mainG').attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var parse = d3.timeParse("%d/%m/%Y");
+    var parse = d3.timeParse("%d-%m-%Y");
 
     var mainKey = "date";
     var keys = ["online", "walkin"];
@@ -137,4 +189,85 @@ export class DarshanReportComponent implements OnInit {
       .text(function (d) { return d; });
   }
 
+  filterChange() {
+    this.reportService.getDarshanReport(this.selectedType).subscribe(
+      result => {
+        if (result.status === 200) {
+          this.results = result;
+          this.processData();
+        }
+      },
+      err => {
+
+      }
+    )
+  }
+  bookingType() {
+    this.processData();
+  }
+  onDateChange() {
+    this.processData();
+  }
+
+  processData() {
+    var results = this.results;
+    var labels = results.labels;
+    var data = results.data;
+
+    var processedData = [];
+    if (this.selectedDateRange === 1) {
+      for (var i = 0; i < labels.length; i++) {
+        var compareDate = new Date();
+        compareDate.setDate(compareDate.getDate() - 7);
+        let tempDate = new Date(labels[i]);
+        if (tempDate >= compareDate) {
+          let obj = {
+            date: labels[i],
+            online: data[0][i],
+            walkin: data[0][i]
+          }
+          processedData.push(obj);
+        }
+      }
+    }
+    else if (this.selectedDateRange === 2) {
+      for (var i = 0; i < labels.length; i++) {
+        var compareDate = new Date();
+        compareDate.setDate(compareDate.getDate() - 7);
+        let tempDate = new Date(labels[i]);
+        if (tempDate >= compareDate) {
+          let obj = {
+            date: labels[i],
+            online: data[0][i],
+            walkin: data[0][i]
+          }
+          processedData.push(obj);
+        }
+      }
+    }
+    else {
+      for (var i = 0; i < labels.length; i++) {
+        let obj = {
+          date: labels[i],
+          online: data[0][i],
+          walkin: data[0][i]
+        }
+        processedData.push(obj);
+      }
+    }
+    if (this.selectedBookingType === 1) {
+      processedData = processedData.map(s => {
+        s.walkin = 0;
+        return s;
+      })
+    }
+    else if (this.selectedBookingType === 2) {
+      processedData = processedData.map(s => {
+        s.online = 0;
+        return s;
+      })
+    }
+
+    this.darshanReport(processedData);
+  }
 }

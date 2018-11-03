@@ -1,3 +1,35 @@
-<div>
+<div class="ui-g ui-fluid">
+    <div class="ui-g-12 ui-md-2">
+        <div class="ui-inputgroup filter-icon">
+            <i class="fa fa-filter"></i>
+            <span>Show me by</span>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-md-2">
+        <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon">
+                Type
+            </span>
+            <p-dropdown [options]="filterType" [(ngModel)]="selectedType" (onChange)="filterChange()"></p-dropdown>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-md-4">
+        <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon">
+                Booking Type
+            </span>
+            <p-dropdown [options]="bookingTypeGrp" [(ngModel)]="selectedBookingType" (onChange)="bookingType()"></p-dropdown>
+        </div>
+    </div>
+    <div class="ui-g-12 ui-md-3">
+        <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon">
+                <i class="fa fa-calendar"></i>
+            </span>
+            <p-dropdown [options]="dateRange" [(ngModel)]="selectedDateRange" (onChange)="onDateChange()"></p-dropdown>
+        </div>
+    </div>
+</div>
+<div class="darshan-report">
     <svg width="875" height="500"></svg>
 </div>

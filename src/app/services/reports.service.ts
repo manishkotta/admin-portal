@@ -18,15 +18,16 @@ export class ReportsService {
     this.darshReportApiGroup = [dateWiseServiceCount, typeWiseDarshanCount, onlineBookingCount];
   }
 
-  getDarshanReport(){
-    forkJoin(this.darshReportApiGroup).subscribe(
-      result=>{
-           console.log(result);
-      },
-      err=>{
-           console.log(err);
-      }
-    )
+  getDarshanReport(bookingType:String):Observable<any> {
+    return this.http.get(API_URL+'/reports/onlinebookingscount?accesstoken=abcdpop&bookingtype=' + bookingType);
+  }
+
+  getLiveInOutReport(): Observable<any> {
+    return this.http.get(API_URL + '/reports/entryexitcount?accesstoken=abcdpop');
+  }
+
+  getHourlyReport(): Observable<any> {
+    return this.http.get(API_URL + '/reports/hourlyservicecount?accesstoken=qwerty&date=2018-05-01');
   }
 
 }

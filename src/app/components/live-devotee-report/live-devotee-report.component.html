@@ -1,3 +1,20 @@
-<div>
+<div class="ui-g ui-fluid">
+  <div class="ui-g-12 ui-md-2">
+      <div class="ui-inputgroup filter-icon">
+          <i class="fa fa-filter"></i>
+          <span>Show me by</span>
+      </div>
+  </div>
+  
+  <div class="ui-g-12 ui-md-4">
+      <div class="ui-inputgroup">
+          <span class="ui-inputgroup-addon">
+              <i class="fa fa-calendar"></i>
+          </span>
+          <p-calendar [(ngModel)]="selectedDate" (onSelect)="onDateChange()"></p-calendar>
+      </div>
+  </div>
+</div>
+<div class="online-report">
   <svg width="875" height="500"></svg>
 </div>

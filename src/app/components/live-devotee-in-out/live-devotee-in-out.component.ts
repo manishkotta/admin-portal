@@ -44,7 +44,7 @@ export class LiveDevoteeInOutComponent implements OnInit {
 
   initReport(data) {
     var svg = d3.select("svg"),
-      margin = { top: 20, right: 20, bottom: 30, left: 40 },
+      margin = { top: 20, right: 20, bottom: 50, left: 40 },
       width = +svg.attr("width") - margin.left - margin.right,
       height = +svg.attr("height") - margin.top - margin.bottom,
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -110,7 +110,7 @@ export class LiveDevoteeInOutComponent implements OnInit {
       .attr("fill", "#000")
       .attr("font-weight", "bold")
       .attr("text-anchor", "start")
-      .text("Total No. of Devotees");
+      .text("");
 
     var legend = g.append("g")
       .attr("font-family", "sans-serif")
@@ -132,6 +132,23 @@ export class LiveDevoteeInOutComponent implements OnInit {
       .attr("y", 9.5)
       .attr("dy", "0.32em")
       .text(function (d) { return d; });
+
+    svg.append("text")
+      .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+      .attr("transform", "translate(" + 15 + "," + 300 + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+      .text("Total No. of Devotees")
+      .attr("fill", "#000")
+      .attr("font-weight", "bold")
+      .attr("text-anchor", "start")
+
+    svg.append("text")
+      .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+      .attr("transform", "translate(" + (width / 2) + "," + (height + 60) + ")")  // centre below axis
+      .text("Hour")
+      .attr("dy", "0.2em")
+      .attr("fill", "#000")
+      .attr("font-weight", "bold")
+      .attr("text-anchor", "start")
 
   }
 

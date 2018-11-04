@@ -26,8 +26,8 @@ export class ReportsService {
     return this.http.get(API_URL + '/reports/entryexitcount?accesstoken=abcdpop');
   }
 
-  getHourlyReport(): Observable<any> {
-    return this.http.get(API_URL + '/reports/hourlyservicecount?accesstoken=qwerty&date=2018-05-01');
+  getHourlyReport(date:String): Observable<any> {
+    return this.http.get(API_URL + '/reports/hourlyservicecount?accesstoken=qwerty&date='+date);
   }
 
 }

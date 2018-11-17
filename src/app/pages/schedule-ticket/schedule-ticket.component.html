@@ -35,20 +35,23 @@
       </div>
     </div>
     <div>
-      <div *ngFor="let i of selectedPoojaType.content">
-        <div class="mb-2">
-          <span class="imp">{{i.serviceName}}</span>
-        </div>
-        <div *ngFor="let tS of i.timeSlots">
-          <p-fieldset legend="{{tS.timeOfDay}}">
-            <div class="row mb-2" *ngFor="let slot of tS.slots">
-              <div class="col-2" *ngFor="let s of slot">
-                <div class="slot-block-1">
-                  {{s.from}}-{{s.to}}
-                </div>
-                <div class="slot-block-2" [class.font-red]="true">
-                  <span *ngIf="!edit">{{s.tickets}}</span>
-                  <input *ngIf="edit" type="number" class="form-control" [(ngModel)]="s.tickets" value="{{s.tickets}}" data-id="{{s.from}}" (change)="onTicketCountChange($event,i)" />
+      <div *ngIf="selectedPoojaType.content.services">
+        <div *ngFor="let i of selectedPoojaType.content.services" class="mb-4">
+          <div class="mb-2">
+            <span class="imp">{{i.serviceName}}</span>
+          </div>
+          <p-fieldset legend="">
+            <div class="row">
+              <div class="col mb-2" *ngFor="let slot of i.timeSlots.slots">
+                <div class="time-slot-block">  
+                  <div class="slot-block-1">
+                    {{slot.time}} - {{calculateToTime(slot.time)}}
+                  </div>
+                  <div class="slot-block-2" [class.font-red]="true">
+                    <span *ngIf="!edit">{{slot.tickets}}</span>
+                    <input *ngIf="edit" type="number" class="form-control" [(ngModel)]="slot.tickets" value="{{slot.tickets}}" data-id="{{slot.time}}"
+                      (change)="onTicketCountChange($event,i.serviceId,slot.timeSlotId)" />
+                  </div>
                 </div>
               </div>
             </div>

@@ -21,4 +21,8 @@ export class ScheduleService {
     return this.http.get(API_URL + "/schedule/getservices?accesstoken=abcdpop");
   }
 
+  getSchedule():Observable<any>{
+    return this.http.get(API_URL + '/schedule/getschedule?accesstoken=abcdpop&fromtime=2018-11-04&totime=2018-11-05');
+  }
+
 }

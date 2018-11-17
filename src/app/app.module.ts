@@ -3,14 +3,26 @@ import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
+import { Title } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+/* App components */
 import { EmployeesComponent } from './pages/employees/employees.component';
 import { ScheduleTicketComponent } from './pages/schedule-ticket/schedule-ticket.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './pages/login/login.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { MainComponent } from 'src/app/pages/main/main.component';
+import { ScheduleHoursComponent } from './components/schedule-hours/schedule-hours.component';
+import { CalenderComponent } from './components/calender/calender.component';
+import { ReportsComponent } from './pages/reports/reports.component';
+import { DarshanReportComponent } from './components/darshan-report/darshan-report.component';
+import { LiveDevoteeReportComponent } from './components/live-devotee-report/live-devotee-report.component';
+import { LiveDevoteeInOutComponent } from './components/live-devotee-in-out/live-devotee-in-out.component';
 
 /* PrimeNg Imports */
 import { TableModule } from 'primeng/table';
@@ -23,27 +35,21 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { TabViewModule } from 'primeng/tabview';
 import { CalendarModule } from 'primeng/calendar';
-import { ScheduleHoursComponent } from './components/schedule-hours/schedule-hours.component';
-import { CalenderComponent } from './components/calender/calender.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { FieldsetModule } from 'primeng/fieldset';
+
+
+/* Services */
 import { TitleService } from './services/title.service';
 import { EmployeeService } from './services/employee.service';
-import { Title } from '@angular/platform-browser';
-import { ReportsComponent } from './pages/reports/reports.component';
-import { DarshanReportComponent } from './components/darshan-report/darshan-report.component';
-import { LiveDevoteeReportComponent } from './components/live-devotee-report/live-devotee-report.component';
-import { LiveDevoteeInOutComponent } from './components/live-devotee-in-out/live-devotee-in-out.component';
-import { FieldsetModule } from 'primeng/fieldset';
-import { LoginComponent } from './pages/login/login.component';
-import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
-import { MainComponent } from 'src/app/pages/main/main.component';
-
-import { AuthGuardService} from 'src/app/services/auth-guard.service';
+import { AuthGuardService } from 'src/app/services/auth-guard.service';
+import { ScheduleService } from 'src/app/services/schedule.service';
+import { ReportsService } from 'src/app/services/reports.service';
 
 const routes: Routes = [
   {
-    path: 'admin', component: MainComponent, canActivate:[AuthGuardService], children: [
+    path: 'admin', component: MainComponent, canActivate: [AuthGuardService], children: [
       { path: 'employees', component: EmployeesComponent, data: { title: "Employees" }, },
       { path: 'schedule-ticket', component: ScheduleTicketComponent, data: { title: "Schedule & Ticket Management" }, },
       {
@@ -103,7 +109,7 @@ const APP_TITLE = 'KASHI!';
     RadioButtonModule,
     FieldsetModule
   ],
-  providers: [TitleService, EmployeeService],
+  providers: [TitleService, EmployeeService, ReportsService, ScheduleService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

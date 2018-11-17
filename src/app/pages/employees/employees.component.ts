@@ -37,7 +37,7 @@ export class EmployeesComponent implements OnInit {
   genderGrp: any[];
 
   registerForm: FormGroup;
-  forgotPaaswordForm:FormGroup;
+  forgotPaaswordForm: FormGroup;
   submitted = false;
 
   constructor(private messageService: MessageService, private formBuilder: FormBuilder, private empService: EmployeeService) {
@@ -49,6 +49,7 @@ export class EmployeesComponent implements OnInit {
     // this.cities = [{"name":"manish",code:"M"},{"name":"Kumar",code:"K"}]
 
     this.genderGrp = [
+      { label: "Select", value: '' },
       { label: "Male", value: 0 },
       { label: "Female", value: 1 }
     ]
@@ -65,7 +66,6 @@ export class EmployeesComponent implements OnInit {
   ngOnInit() {
     this.empService.getEmployees().subscribe(
       (result) => {
-        console.log(result);
         this.employees = result.employees;
         this.employeeCount = result.employees.length;
       },
@@ -94,8 +94,8 @@ export class EmployeesComponent implements OnInit {
     });
 
     this.forgotPaaswordForm = this.formBuilder.group({
-      emailOrPhone: ['',Validators.required]
-   });
+      emailOrPhone: ['', Validators.required]
+    });
   }
 
   onPhotoUpload(event: any) {
@@ -112,13 +112,37 @@ export class EmployeesComponent implements OnInit {
   showDialogAdd() {
     this.display = true;
     this.addEditEmployeeHeader = "Create New Employee";
+
+    this.registerForm.controls['firstName'].setValue('');
+    this.registerForm.controls['lastName'].setValue('');
+    this.registerForm.controls['email'].setValue('');
+    this.registerForm.controls['mobile'].setValue('');
+
+    this.registerForm.controls['dob'].setValue('');
+    this.registerForm.controls['workloc'].setValue('');
+    this.registerForm.controls['idproof'].setValue('');
+    this.registerForm.controls['gender'].setValue('');
+
+    this.registerForm.controls['addressproof'].setValue('');
   }
 
   showDialogEdit(emp: any) {
-    console.log(emp);
     this.addEditEmployeeHeader = "Edit Employee";
     this.display = true;
     this.employee = emp;
+
+    this.registerForm.controls['firstName'].setValue(emp.fname);
+    this.registerForm.controls['lastName'].setValue(emp.lname);
+    this.registerForm.controls['email'].setValue(emp.email);
+    this.registerForm.controls['mobile'].setValue(emp.phone);
+
+    this.registerForm.controls['dob'].setValue(emp.dob);
+    this.registerForm.controls['workloc'].setValue(emp.workLocation);
+    this.registerForm.controls['idproof'].setValue(emp.idProof);
+    this.registerForm.controls['gender'].setValue(emp.gender);
+
+    this.registerForm.controls['addressproof'].setValue(emp.idProofNumber);
+
   }
 
   showSendSMSDialog() {
@@ -134,8 +158,15 @@ export class EmployeesComponent implements OnInit {
   }
 
   get f() { return this.registerForm.controls; }
+
   addEmployee(f) {
     this.submitted = true;
+
+    console.log(this.registerForm)
+    Object.keys(this.registerForm.controls).forEach(field => { // {1}
+      const control = this.registerForm.get(field);            // {2}
+      control.markAsTouched({ onlySelf: true });       // {3}
+    });
     // stop here if form is invalid
     if (this.registerForm.invalid) {
       return;
@@ -156,7 +187,7 @@ export class EmployeesComponent implements OnInit {
         workLocation: f.workloc,
         userTypeId: 2,
         idProof: f.idproof,
-        idProofNumber: '123456'
+        idProofNumber: f.addressproof
       },
       address: {
         address1: f.addone,
@@ -168,10 +199,10 @@ export class EmployeesComponent implements OnInit {
     }
     this.empService.addEmployee(employeeServiceObject).subscribe(
       (result) => {
-        this.messageService.add({severity:'success', summary:'Add Employee', detail:'Employee has been added successfully'})
+        this.messageService.add({ severity: 'success', summary: 'Add Employee', detail: 'Employee has been added successfully' })
       },
       (err) => {
-        this.messageService.add({severity:'error', summary:'Add Employee', detail:'Failed to add employee.'})
+        this.messageService.add({ severity: 'error', summary: 'Add Employee', detail: 'Failed to add employee.' })
       }
     )
     alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.employee))
@@ -189,27 +220,28 @@ export class EmployeesComponent implements OnInit {
   }
 
   sendTemporaryPassword(f) {
-    if(f.emailOrPhone === "email"){
-        this.empService.passwordReset(this.employee.email).subscribe(
-          (result)=>{
-             this.messageService.add({severity:'success', summary:'Password Reset Message', detail:'Link has been sent to the registered email.'})
-          },
-          (err)=>{
-            this.messageService.add({severity:'error', summary:'Password Reset Message', detail:'Failed to send a reset link to the registered email.'})
-          }
-        )
-    }else{
-      this.empService.sendOtp(this.employee.phone).subscribe(
-        (result)=>{
-          this.messageService.add({severity:'success', summary:'Password Reset Message', detail:'OTP has been sent to the registered mobile number.'})
+    if (f.emailOrPhone === "email") {
+      this.empService.passwordReset(this.employee.email).subscribe(
+        (result) => {
+          this.messageService.add({ severity: 'success', summary: 'Password Reset Message', detail: 'Link has been sent to the registered email.' })
         },
-        (err)=>{
-          this.messageService.add({severity:'error', summary:'Password Reset Message', detail:'Failed to send OTP to the registered mobile number.'})
+        (err) => {
+          this.messageService.add({ severity: 'error', summary: 'Password Reset Message', detail: 'Failed to send a reset link to the registered email.' })
+        }
+      )
+    } else {
+      this.empService.sendOtp(this.employee.phone).subscribe(
+        (result) => {
+          this.messageService.add({ severity: 'success', summary: 'Password Reset Message', detail: 'OTP has been sent to the registered mobile number.' })
+        },
+        (err) => {
+          this.messageService.add({ severity: 'error', summary: 'Password Reset Message', detail: 'Failed to send OTP to the registered mobile number.' })
         }
       )
     }
     this.closeActivatePassDialog();
   }
+
   closeActivatePassDialog() {
     this.activatePasswordDisplay = false;
   }
@@ -226,7 +258,7 @@ export class EmployeesComponent implements OnInit {
     }
   }
 
-  citySelectHndlr(value:any){
+  citySelectHndlr(value: any) {
     this.registerForm.controls['state'].setValue(this.registerForm.controls['city'].value);
   }
 

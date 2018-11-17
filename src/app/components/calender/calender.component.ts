@@ -9,15 +9,20 @@ export class CalenderComponent implements OnInit {
 
   @Input() date: Date;
   @Output() selectedDate = new EventEmitter<Date>();
+  selDate : Date;
+  currentDate:Date;
   weeks: any[];
   days: any[];
   constructor() {
 
     this.weeks = [];
     this.days = [];
+    this.selDate = new Date();
+    this.currentDate = new Date();
   }
 
   ngOnInit() {
+    this.selectedDate.emit(this.selDate);
     var year = this.date.getFullYear();
     var month = this.date.getMonth();
 
@@ -46,6 +51,7 @@ export class CalenderComponent implements OnInit {
   }
 
   dateSelected(d){
+    this.selDate =d;
     this.selectedDate.emit(d);
   }
 

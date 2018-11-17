@@ -45,3 +45,12 @@
     padding:0.7em;
     text-transform: uppercase;
 }
+
+.disabled{
+    background-color: #D0021B;
+    cursor:none;
+  }
+.active{
+    background-color: #4A90E2;
+}
+

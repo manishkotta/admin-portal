@@ -15,8 +15,13 @@
 color:#D0021B;
 }
 
+
+.time-slot-block{
+    width:8em;
+    height:auto;
+}
 .slot-block-1{
-    padding:12% 18%;
+    padding: 10px 10px;
     border:1px solid #EAEAEA;
     background-color: white;
     color:#608735;
@@ -24,10 +29,10 @@ color:#D0021B;
     font-weight:500;
 }
 .slot-block-2{
-    padding:5% 10%;
     border:1px solid #EAEAEA;
     background-color: white;
-    font-weight:600;    
+    font-weight:600;
+    padding: 10px 10px;  
 }
 
 .slot-block-3{

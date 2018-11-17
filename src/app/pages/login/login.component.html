@@ -4,18 +4,32 @@
       <div align="center" class="modal-dialog modal-login">
         <div class="modal-content">
           <div class="modal-header">
-            <div class="avatar"></div>
+            <div class="avatar">
+              <img src="/assets/kashi_logo_white.png">
+            </div>
             <div style="margin-top: 35px;">Shri Kashi Viswanath Mandir Trust</div>
             <hr style="margin-top: 15px;">
             <h4 class="modal-title">Administrator Login</h4>
+
           </div>
           <div class="modal-body">
+            <div class="card error-block" *ngIf="loginError">
+              <span>Username/Email and Password do not match.</span>
+            </div>
             <form [formGroup]="registerForm" (ngSubmit)="loginRequest(registerForm.value)">
               <div class="form-group">
-                <input type="text" formControlName="username" class="form-control" name="username" placeholder="Username" required="required">
+                <input type="text" formControlName="username" class="form-control" name="username" placeholder="Username" required="required"
+                  (focus)="loginError=false;">
+                <div *ngIf="!registerForm.controls['username'].valid && registerForm.controls['username'].touched" class="error">
+                  <div>Username/Email is required</div>
+                </div>
               </div>
               <div class="form-group">
-                <input type="password" formControlName="password" class="form-control" name="password" placeholder="Password" required="required">
+                <input type="password" formControlName="password" class="form-control" name="password" placeholder="Password" required="required"
+                  (focus)="loginError=false;">
+                <div *ngIf="!registerForm.controls['password'].valid && registerForm.controls['password'].touched" class="error">
+                  <div>Password is required</div>
+                </div>
               </div>
               <div class="form-group">
                 <button style="float: right;" type="submit" class="btn btn-warning">Login</button>

@@ -123,13 +123,14 @@
     justify-content: space-evenly;
     margin-top:5%;
 }
+
+.city-drp .ui-inputtext{
+    width:83%
+}
+
 .error{
     width: 100%;
     margin-top: 0.25rem;
     font-size: 80%;
     color: #dc3545;
-}
-
-.city-drp .ui-inputtext{
-    width:83%
 }

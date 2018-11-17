@@ -11,7 +11,7 @@
             <div class="input-group-prepend">
               <span class="fa fa-search input-group-text"></span>
             </div>
-            <input placeholder="Search by name,id,role,mobile" class="form-control" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            <input placeholder="Search by name,id,mobile" class="form-control" (input)="dt.filterGlobal($event.target.value, 'contains')"
             />
           </div>
         </div>
@@ -46,7 +46,8 @@
             <p-tableCheckbox [value]="emp"></p-tableCheckbox>
           </td>
           <td>
-            <img class="profile-image" src="{{emp.imageUrl}}" />
+            <img *ngIf="emp.imageUrl" class="profile-image" src="{{emp.imageUrl}}" />
+            <img *ngIf="!emp.imageUrl" class="profile-image" src="/assets/avatar.png" />
           </td>
           <td>{{emp.fname}} {{emp.lname}}</td>
           <td>Counter Staff</td>
@@ -67,7 +68,6 @@
             <div (click)="showDialogEdit(emp)">
               <i class="fa fa-edit fa-lg" aria-hidden="true"></i>
             </div>
-
           </td>
         </tr>
       </ng-template>
@@ -97,7 +97,7 @@
               </div>
               <div class="col-6">
                 <input type="text" formControlName="firstName" class="form-control" id="fname" name="fname">
-                <div *ngIf="!registerForm.controls['firstName'].valid && registerForm.controls['firstName'].dirty" class="error">
+                <div *ngIf="!registerForm.controls['firstName'].valid && registerForm.controls['firstName'].touched" class="error">
                   <div> First Name is required</div>
                 </div>
               </div>
@@ -108,7 +108,7 @@
               </div>
               <div class="col-6">
                 <input type="text" formControlName="lastName" class="form-control" id="lname" name="lname">
-                <div *ngIf="!registerForm.controls['lastName'].valid && registerForm.controls['lastName'].dirty" class="error">
+                <div *ngIf="!registerForm.controls['lastName'].valid && registerForm.controls['lastName'].touched" class="error">
                   <div> Last Name is required</div>
                 </div>
               </div>
@@ -119,7 +119,7 @@
               </div>
               <div class="col-8">
                 <p-dropdown [options]="genderGrp" formControlName="gender" name="gender" [autoWidth]="false" styleClass="full-width"></p-dropdown>
-                <div *ngIf="!registerForm.controls['gender'].valid && registerForm.controls['gender'].dirty" class="error">
+                <div *ngIf="!registerForm.controls['gender'].valid && registerForm.controls['gender'].touched" class="error">
                   <div> Gender is required</div>
                 </div>
               </div>
@@ -224,6 +224,9 @@
               </div>
               <div class="col-8">
                 <input type="email" formControlName="email" class="form-control" id="email" name="email">
+                <div *ngIf="!registerForm.controls['email'].valid && registerForm.controls['email'].touched" class="error">
+                    <div> Email is required or not valid.</div>
+                  </div>
               </div>
             </div>
             <div class="form-group mb-2">
@@ -244,7 +247,7 @@
             </div>
             <div class="form-group mb-2">
               <div class="col-4">
-                <label for="addressproff">Address Proof</label>
+                <label for="addressproff">ID Number</label>
               </div>
               <div class="col-8">
                 <input type="text" formControlName="addressproof" class="form-control" id="addressproof" name="addressproof">

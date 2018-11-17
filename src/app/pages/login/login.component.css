@@ -93,3 +93,19 @@ body {
         background-color: #f0ad4e;
         border-color: #eea236;
     }
+
+    .error-block{
+        background-color: #f8b7bd;
+        border: 0 none;
+        color: #212121;
+        margin-bottom:8px;
+        font-size: 14px;
+        padding:2% 2%;
+    }
+
+    .error{
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 80%;
+        color: #dc3545;
+    }
